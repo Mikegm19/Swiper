@@ -5,6 +5,7 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
@@ -27,10 +28,39 @@ def get_target_urls() -> list[str]:
     return []
 
 
+def get_random_proxy() -> dict | None:
+    """Picks a random proxy from the PROXY_LIST env var and formats it for Playwright."""
+    raw_list = os.getenv("PROXY_LIST", "").strip()
+    if not raw_list:
+        return None
+
+    proxies = [p.strip() for p in raw_list.split(",") if p.strip()]
+    if not proxies:
+        return None
+
+    chosen = random.choice(proxies)
+    parsed = urlparse(chosen)
+
+    proxy_config = {
+        "server": f"{parsed.scheme}://{parsed.hostname}:{parsed.port}"
+    }
+    if parsed.username:
+        proxy_config["username"] = parsed.username
+    if parsed.password:
+        proxy_config["password"] = parsed.password
+
+    return proxy_config
+
+
 def fetch_html_playwright(url: str) -> str | None:
-    """Renders JS-heavy pages with human-like timing and basic anti-detection."""
+    """Renders JS-heavy pages with optional proxy rotation and human-like timing."""
+    proxy_config = get_random_proxy()
+
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(
+            headless=True,
+            proxy=proxy_config,
+        )
         context = browser.new_context(
             user_agent=(
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -48,12 +78,11 @@ def fetch_html_playwright(url: str) -> str | None:
 
         page = context.new_page()
         try:
-            # Random pre-request jitter so requests aren't robotic
+            # Random pre-request jitter
             time.sleep(random.uniform(2.0, 5.0))
 
             page.goto(url, wait_until="domcontentloaded", timeout=30000)
 
-            # Wait for JS/network to settle without crashing on streaming sites
             try:
                 page.wait_for_load_state("networkidle", timeout=10000)
             except PlaywrightTimeout:
@@ -64,8 +93,7 @@ def fetch_html_playwright(url: str) -> str | None:
                 page.mouse.wheel(0, random.randint(400, 900))
                 time.sleep(random.uniform(1.5, 3.5))
 
-            html = page.content()
-            return html
+            return page.content()
         except Exception as err:
             print(f"[ERROR] Failed to scrape {url}: {err}")
             return None
@@ -123,7 +151,6 @@ def main() -> None:
 
     for idx, url in enumerate(urls):
         if idx > 0:
-            # Cooldown between multiple URLs to avoid rate-limit bans
             time.sleep(random.uniform(5.0, 12.0))
 
         html = fetch_html_playwright(url)
