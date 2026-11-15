@@ -3,99 +3,542 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scraper Bot Dashboard</title>
+  <title>Swiper // Deep Spider Console</title>
   <style>
     :root {
-      --bg: #0f172a; --surface: #1e293b; --border: #334155;
-      --text: #f8fafc; --muted: #94a3b8; --accent: #3b82f6; --accent-hover: #2563eb;
-      --term-bg: #020617; --green: #4ade80; --amber: #fbbf24; --red: #f87171; --cyan: #38bdf8;
+      --bg-deep: #020611;
+      --bg-mid: #061024;
+      --surface: rgba(10, 20, 42, 0.84);
+      --surface-solid: #0a142a;
+      --border: rgba(56, 189, 248, 0.18);
+      --border-strong: rgba(56, 189, 248, 0.38);
+      --text: #e2ecf8;
+      --muted: #7c93b5;
+      --accent: #0ea5e9;
+      --accent-glow: rgba(14, 165, 233, 0.35);
+      --accent-hover: #38bdf8;
+      --term-bg: #02050d;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --cyan: #38bdf8;
     }
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { margin: 0; padding: 2rem; background: var(--bg); color: var(--text); }
-    .container { max-width: 1050px; margin: 0 auto; }
-    h1 { margin-top: 0; font-size: 1.5rem; }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 15%, rgba(14, 165, 233, 0.14), transparent 45%),
+        radial-gradient(circle at 82% 85%, rgba(30, 64, 175, 0.22), transparent 50%),
+        linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 100%);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==================== GATEKEEPER PAGE ==================== */
+    #gateScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(14, 116, 144, 0.22), transparent 55%),
+        linear-gradient(180deg, #01040c 0%, #040c1e 60%, #071630 100%);
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #gateScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Bioluminescent Ocean Canvas */
+    .ocean-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .whale-track {
+      position: absolute;
+      top: 26%;
+      left: -480px;
+      width: 460px;
+      opacity: 0.34;
+      filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.32));
+      animation: swimAcross 26s linear infinite;
+    }
+
+    .whale-bob {
+      animation: gentleBob 5.5s ease-in-out infinite;
+    }
+
+    .whale-tail {
+      transform-origin: 95px 86px;
+      animation: tailWave 3.2s ease-in-out infinite;
+    }
+
+    @keyframes swimAcross {
+      0%   { transform: translateX(0) scale(0.95); opacity: 0; }
+      8%   { opacity: 0.36; }
+      90%  { opacity: 0.36; }
+      100% { transform: translateX(calc(100vw + 960px)) scale(1.04); opacity: 0; }
+    }
+
+    @keyframes gentleBob {
+      0%, 100% { transform: translateY(0px) rotate(-1.5deg); }
+      50%      { transform: translateY(-22px) rotate(1.5deg); }
+    }
+
+    @keyframes tailWave {
+      0%, 100% { transform: rotate(-7deg); }
+      50%      { transform: rotate(8deg); }
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(186, 230, 253, 0.8), rgba(56, 189, 248, 0.1));
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      15%  { opacity: 0.45; }
+      85%  { opacity: 0.25; }
+      100% { transform: translateY(-105vh) translateX(24px); opacity: 0; }
+    }
+
+    .gate-card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 410px;
+      padding: 2.25rem 2rem;
+      background: rgba(6, 15, 34, 0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-strong);
+      border-radius: 16px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65), 0 0 40px rgba(14, 165, 233, 0.1);
+      text-align: center;
+    }
+
+    .gate-badge {
+      display: inline-block;
+      padding: 0.28rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      margin-bottom: 1rem;
+    }
+
+    .gate-card h1 {
+      margin: 0 0 0.45rem;
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #f8fafc;
+    }
+
+    .gate-card p {
+      margin: 0 0 1.6rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .gate-error {
+      min-height: 1.2rem;
+      font-size: 0.82rem;
+      color: var(--red);
+      margin-top: 0.25rem;
+    }
+
+    .shake {
+      animation: shake 0.35s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    /* ==================== DASHBOARD ==================== */
+    #dashboard {
+      display: none;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3.5rem;
+    }
+
+    #dashboard.visible {
+      display: block;
+      animation: fadeIn 0.45s ease;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .brand h2 {
+      margin: 0;
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
     .panel {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-bottom: 1.4rem;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
     }
-    .input-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
     input {
-      flex: 1; min-width: 240px; padding: 0.65rem 0.9rem; border-radius: 6px;
-      border: 1px solid var(--border); background: var(--bg); color: var(--text);
+      flex: 1;
+      min-width: 230px;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(2, 6, 17, 0.85);
+      color: var(--text);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
     button {
-      padding: 0.65rem 1.2rem; border: none; border-radius: 6px;
-      background: var(--accent); color: white; font-weight: 600; cursor: pointer;
+      padding: 0.75rem 1.35rem;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0284c7, #0ea5e9);
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.15s, filter 0.2s;
     }
-    button:hover { background: var(--accent-hover); }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; }
-    .meta { color: var(--muted); font-size: 0.875rem; }
 
-    /* Live Terminal Console */
+    button:hover:not(:disabled) {
+      filter: brightness(1.12);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.55rem 0.95rem;
+      font-size: 0.82rem;
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      color: var(--text);
+      border-color: var(--border-strong);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    /* Terminal Console */
     .terminal {
-      margin-top: 1rem; background: var(--term-bg); border: 1px solid var(--border);
-      border-radius: 6px; padding: 0.85rem 1rem; height: 155px; overflow-y: auto;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
-      line-height: 1.55;
+      margin-top: 1rem;
+      background: var(--term-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      height: 165px;
+      overflow-y: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.81rem;
+      line-height: 1.6;
     }
-    .log-line { display: flex; gap: 0.5rem; animation: fadeIn 0.2s ease-out; }
-    .log-time { color: #64748b; user-select: none; }
-    .log-info { color: var(--cyan); }
-    .log-ok { color: var(--green); }
-    .log-warn { color: var(--amber); }
-    .log-err { color: var(--red); }
-    .cursor {
-      display: inline-block; width: 7px; height: 13px; background: var(--green);
-      vertical-align: middle; margin-left: 4px; animation: blink 1s steps(2, start) infinite;
-    }
-    @keyframes blink { to { visibility: hidden; } }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 
-    table { width: 100%; border-collapse: collapse; text-align: left; }
-    th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
-    th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
+    .log-line { display: flex; gap: 0.6rem; animation: fadeIn 0.2s ease-out; }
+    .log-time { color: #475569; user-select: none; flex-shrink: 0; }
+    .log-info { color: var(--cyan); word-break: break-word; }
+    .log-ok   { color: var(--green); word-break: break-word; }
+    .log-warn { color: var(--amber); word-break: break-word; }
+    .log-err  { color: var(--red); word-break: break-word; }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 13px;
+      background: var(--green);
+      vertical-align: middle;
+      margin-left: 4px;
+      animation: blink 1s steps(2, start) infinite;
+    }
+
+    @keyframes blink { to { visibility: hidden; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    /* Toolbar & Table */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .table-wrap {
+      padding: 0;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      table-layout: auto;
+    }
+
+    th, td {
+      padding: 0.95rem 1.15rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      word-break: break-word;
+    }
+
+    th {
+      background: rgba(2, 6, 17, 0.55);
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover {
+      background: rgba(56, 189, 248, 0.05);
+    }
+
     tr:last-child td { border-bottom: none; }
-    a { color: #60a5fa; text-decoration: none; }
-    .empty { text-align: center; padding: 2rem; color: var(--muted); }
+    a { color: var(--cyan); text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
+    .empty { text-align: center; padding: 2.5rem 1rem; color: var(--muted); }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Scraper Bot Dashboard</h1>
 
-    <!-- Frontend Trigger Panel -->
-    <div class="panel">
-      <div class="input-row">
-        <input type="url" id="targetUrl" placeholder="Enter Target URL (https://example.com/team)" />
-        <button id="runBotBtn">Run Bot on URL</button>
+  <!-- ==================== FIRST PAGE: WHALE GATEKEEPER ==================== -->
+  <section id="gateScreen">
+    <div class="ocean-layer" id="oceanLayer">
+      <!-- Animated Deep-Sea Whale SVG -->
+      <div class="whale-track">
+        <div class="whale-bob">
+          <svg viewBox="0 0 460 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="whaleGrad" x1="0" y1="0" x2="460" y2="140" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.75" />
+                <stop offset="55%" stop-color="#1d4ed8" stop-opacity="0.85" />
+                <stop offset="100%" stop-color="#0f172a" stop-opacity="0.95" />
+              </linearGradient>
+            </defs>
+            <!-- Tail -->
+            <g class="whale-tail">
+              <path d="M98 86 C62 72, 34 38, 12 24 C22 52, 36 74, 58 86 C34 98, 16 122, 10 144 C36 130, 66 106, 98 92 Z" fill="url(#whaleGrad)" />
+            </g>
+            <!-- Main Body -->
+            <path d="M90 88 C145 36, 255 18, 352 40 C408 53, 444 78, 448 104 C448 122, 424 134, 384 136 C322 140, 232 136, 152 114 C122 105, 102 96, 90 88 Z" fill="url(#whaleGrad)" />
+            <!-- Belly Grooves -->
+            <path d="M235 126 C295 134, 365 134, 422 122" stroke="#7dd3fc" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round" />
+            <path d="M255 117 C310 124, 372 124, 430 112" stroke="#7dd3fc" stroke-opacity="0.25" stroke-width="1.5" stroke-linecap="round" />
+            <!-- Pectoral Fin -->
+            <path d="M275 114 C252 140, 224 162, 206 168 C228 152, 240 132, 248 112 Z" fill="#0ea5e9" fill-opacity="0.55" />
+            <!-- Eye -->
+            <circle cx="388" cy="96" r="3.2" fill="#e0f2fe" fill-opacity="0.9" />
+          </svg>
+        </div>
       </div>
-      <div class="terminal" id="terminal"></div>
     </div>
 
-    <!-- Data Controls -->
-    <div class="row" style="margin-bottom: 1rem;">
+    <div class="gate-card" id="gateCard">
+      <div class="gate-badge">Restricted Node</div>
+      <h1>Swiper Deep Crawler</h1>
+      <p>Enter your authorization code to access the concurrent spider dashboard.</p>
+      <form class="gate-form" id="gateForm" autocomplete="off">
+        <input type="password" id="passcodeInput" placeholder="Enter access code..." required />
+        <button type="submit">Unlock Dashboard</button>
+        <div class="gate-error" id="gateError"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==================== MAIN DASHBOARD ==================== -->
+  <main id="dashboard">
+    <header class="topbar">
+      <div class="brand">
+        <h2>Swiper Spider Dashboard</h2>
+        <span>Hybrid Concurrent Crawler • Fast HTTP + Asset-Blocked Playwright</span>
+      </div>
+      <button class="btn-ghost" id="lockBtn">Lock Session</button>
+    </header>
+
+    <section class="panel">
+      <div class="input-row">
+        <input type="url" id="targetUrl" placeholder="Enter seed URL to spider (https://example.com)" />
+        <button id="runBotBtn">Launch Spider</button>
+      </div>
+      <div class="terminal" id="terminal"></div>
+    </section>
+
+    <div class="toolbar">
       <div class="meta" id="metaInfo">Loading data...</div>
-      <div class="row">
-        <input type="search" id="searchInput" placeholder="Filter results..." style="flex: none; width: 220px;" />
+      <div class="toolbar-actions">
+        <input type="search" id="searchInput" placeholder="Filter name, email, phone..." style="min-width: 210px;" />
         <button id="downloadCsvBtn" disabled>Download CSV</button>
       </div>
     </div>
 
-    <!-- Results Table -->
-    <div class="panel" style="padding: 0; overflow-x: auto;">
+    <section class="panel table-wrap">
       <table>
         <thead>
-          <tr><th>Name</th><th>Email</th><th>Phone</th><th>Source</th></tr>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Source Page</th>
+          </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="4" class="empty">Loading...</td></tr>
+          <tr><td colspan="4" class="empty">Loading records...</td></tr>
         </tbody>
       </table>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script>
+    const ACCESS_CODE = "Ormbalumun05";
+    const SESSION_KEY = "swiper_unlocked";
+
+    const gateScreen = document.getElementById("gateScreen");
+    const gateCard = document.getElementById("gateCard");
+    const gateForm = document.getElementById("gateForm");
+    const passcodeInput = document.getElementById("passcodeInput");
+    const gateError = document.getElementById("gateError");
+    const dashboard = document.getElementById("dashboard");
+    const lockBtn = document.getElementById("lockBtn");
+    const oceanLayer = document.getElementById("oceanLayer");
+
+    // Generate subtle rising bioluminescent bubbles
+    for (let i = 0; i < 18; i++) {
+      const b = document.createElement("div");
+      b.className = "bubble";
+      const size = Math.random() * 7 + 3;
+      b.style.width = `${size}px`;
+      b.style.height = `${size}px`;
+      b.style.left = `${Math.random() * 100}%`;
+      b.style.animationDuration = `${Math.random() * 10 + 9}s`;
+      b.style.animationDelay = `${Math.random() * 8}s`;
+      oceanLayer.appendChild(b);
+    }
+
+    function unlockDashboard() {
+      sessionStorage.setItem(SESSION_KEY, "1");
+      gateScreen.classList.add("hidden");
+      dashboard.classList.add("visible");
+      if (!initialized) {
+        initialized = true;
+        log("Access granted. Hybrid spider console online.", "ok");
+        loadData();
+      }
+    }
+
+    gateForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (passcodeInput.value.trim() === ACCESS_CODE) {
+        gateError.textContent = "";
+        unlockDashboard();
+      } else {
+        gateError.textContent = "Invalid authorization code.";
+        gateCard.classList.remove("shake");
+        void gateCard.offsetWidth;
+        gateCard.classList.add("shake");
+        passcodeInput.value = "";
+        passcodeInput.focus();
+      }
+    });
+
+    lockBtn.addEventListener("click", () => {
+      sessionStorage.removeItem(SESSION_KEY);
+      dashboard.classList.remove("visible");
+      gateScreen.classList.remove("hidden");
+      passcodeInput.value = "";
+      passcodeInput.focus();
+    });
+
+    // ==================== DASHBOARD LOGIC ====================
+    let initialized = false;
     let allContacts = [];
     let filteredContacts = [];
     let lastTimestamp = null;
@@ -111,11 +554,17 @@
     const searchInput = document.getElementById("searchInput");
     const downloadBtn = document.getElementById("downloadCsvBtn");
 
+    function escapeHtml(str = "") {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
     function log(msg, type = "info", showCursor = false) {
-      // Remove blinking cursor from previous line
       const oldCursor = terminalEl.querySelector(".cursor");
       if (oldCursor) oldCursor.remove();
-
       const time = new Date().toLocaleTimeString([], { hour12: false });
       const line = document.createElement("div");
       line.className = "log-line";
@@ -142,7 +591,8 @@
         filteredContacts = [...allContacts];
 
         const updated = data.last_updated ? new Date(data.last_updated).toLocaleString() : "Unknown";
-        metaInfo.textContent = `${allContacts.length} records • Last updated: ${updated}`;
+        const crawledInfo = data.pages_crawled ? ` • ${data.pages_crawled} pages spidered` : "";
+        metaInfo.textContent = `${allContacts.length} contacts${crawledInfo} • Updated: ${updated}`;
         downloadBtn.disabled = allContacts.length === 0;
         renderTable(filteredContacts);
 
@@ -150,7 +600,7 @@
           clearInterval(pollTimer);
           clearStageTimers();
           pollTimer = null;
-          log(`SUCCESS: Fresh data.json received (${allContacts.length} contacts). Table updated.`, "ok");
+          log(`SUCCESS: Spider finished (${data.pages_crawled || "?"} pages, ${allContacts.length} contacts).`, "ok");
           runBotBtn.disabled = false;
         } else if (isPoll) {
           pollCount++;
@@ -158,9 +608,9 @@
         }
       } catch {
         if (!isPoll) {
-          metaInfo.textContent = "No data.json found yet. Run the bot to generate it.";
-          tableBody.innerHTML = `<tr><td colspan="4" class="empty">No data available yet.</td></tr>`;
-          log("Ready. No data.json detected yet—enter a URL above to start.", "warn");
+          metaInfo.textContent = "No data.json yet. Launch the spider above.";
+          tableBody.innerHTML = `<tr><td colspan="4" class="empty">No contacts scraped yet.</td></tr>`;
+          log("Ready. Enter a target domain above and click Launch Spider.", "warn");
         }
       }
     }
@@ -177,7 +627,7 @@
       clearStageTimers();
       if (pollTimer) clearInterval(pollTimer);
 
-      log(`Initializing scrape job for: ${url}`, "info", true);
+      log(`Dispatching concurrent spider for: ${url}`, "info", true);
 
       try {
         const res = await fetch("/api/scrape", {
@@ -189,15 +639,14 @@
         const result = await res.json();
         if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
 
-        log("Vercel backend authenticated & dispatched GitHub Action.", "ok", true);
+        log("Vercel backend authenticated & triggered GitHub Actions.", "ok", true);
 
-        // Staged pipeline feed while GitHub Actions + Vercel execute
         const stages = [
-          [4000, "Spinning up Ubuntu runner in GitHub Actions...", "info"],
-          [12000, "Booting headless Playwright Chromium browser...", "info"],
-          [22000, "Applying anti-ban jitter & navigating to target URL...", "info"],
-          [34000, "Scrolling page & extracting linked names, emails, and phones...", "info"],
-          [48000, "Committing data.json & waiting for Vercel CDN rebuild...", "warn"],
+          [4000,  "Starting ThreadPoolExecutor (5 concurrent workers, lxml parser)...", "info"],
+          [14000, "Discovering internal links & prioritizing /contact, /team, /about...", "info"],
+          [26000, "Checking for JS SPAs (asset-blocked Playwright fallback on standby)...", "info"],
+          [40000, "Deduplicating names, emails, mailto/tel links & committing data.json...", "warn"],
+          [55000, "Waiting for Vercel CDN to publish fresh data.json...", "warn"],
         ];
 
         stages.forEach(([delay, text, type]) => {
@@ -213,17 +662,9 @@
       }
     }
 
-    function escapeHtml(str = "") {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-
     function renderTable(rows) {
       if (!rows.length) {
-        tableBody.innerHTML = `<tr><td colspan="4" class="empty">No matching contacts.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="4" class="empty">No matching contacts found.</td></tr>`;
         return;
       }
       tableBody.innerHTML = rows.map(c => `
@@ -231,7 +672,7 @@
           <td>${escapeHtml(c.name)}</td>
           <td>${escapeHtml(c.email)}</td>
           <td>${escapeHtml(c.phone)}</td>
-          <td><a href="${escapeHtml(c.source)}" target="_blank" rel="noopener">Link</a></td>
+          <td><a href="${escapeHtml(c.source)}" target="_blank" rel="noopener">Open Page</a></td>
         </tr>
       `).join("");
     }
@@ -266,8 +707,10 @@
     runBotBtn.addEventListener("click", triggerBot);
     downloadBtn.addEventListener("click", downloadCsv);
 
-    log("System online. Loading cached data.json...", "info");
-    loadData();
+    // Auto-unlock if already authenticated in this browser tab
+    if (sessionStorage.getItem(SESSION_KEY) === "1") {
+      unlockDashboard();
+    }
   </script>
 </body>
 </html>
