@@ -1,22 +1,9 @@
 {
-  "last_updated": "2026-11-15T12:58:01.131977+00:00",
+  "last_updated": "2026-11-15T13:15:01.020242+00:00",
   "scraped_urls": [
-    "https://veepn.com/online-sms/"
+    "https://swiper-inky.vercel.app/"
   ],
-  "pages_crawled": 25,
-  "total_records": 2,
-  "contacts": [
-    {
-      "name": "Want a number that's only yours?",
-      "email": "",
-      "phone": "+1 (235) 213 0595",
-      "source": "https://veepn.com/online-sms"
-    },
-    {
-      "name": "Get the VeePN Black Friday deal",
-      "email": "",
-      "phone": "192 874 588",
-      "source": "https://veepn.com"
-    }
-  ]
+  "pages_crawled": 1,
+  "total_records": 0,
+  "contacts": []
 }
