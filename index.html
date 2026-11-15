@@ -3,30 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scraped Contacts Dashboard</title>
+  <title>Scraper Bot Dashboard</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
+      --bg: #0f172a; --surface: #1e293b; --border: #334155;
+      --text: #f8fafc; --muted: #94a3b8; --accent: #3b82f6; --accent-hover: #2563eb;
     }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
     body { margin: 0; padding: 2rem; background: var(--bg); color: var(--text); }
-    .container { max-width: 1000px; margin: 0 auto; }
-    header {
-      display: flex; flex-wrap: wrap; justify-content: space-between;
-      align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+    .container { max-width: 1050px; margin: 0 auto; }
+    .panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;
     }
-    h1 { margin: 0; font-size: 1.5rem; }
-    .meta { color: var(--muted); font-size: 0.875rem; margin-top: 0.25rem; }
-    .controls { display: flex; gap: 0.75rem; align-items: center; }
-    input[type="search"] {
-      padding: 0.6rem 0.9rem; border-radius: 6px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text); min-width: 240px;
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }
+    input {
+      width: 100%; padding: 0.6rem 0.85rem; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--bg); color: var(--text);
     }
     button {
       padding: 0.6rem 1.1rem; border: none; border-radius: 6px;
@@ -34,43 +27,49 @@
     }
     button:hover { background: var(--accent-hover); }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .table-wrap {
-      overflow-x: auto; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 8px;
-    }
+    .row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; }
+    .meta { color: var(--muted); font-size: 0.875rem; margin-top: 0.5rem; }
     table { width: 100%; border-collapse: collapse; text-align: left; }
     th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
-    th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    tr:last-child td { border-bottom: none; }
+    th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
     a { color: #60a5fa; text-decoration: none; }
     .empty { text-align: center; padding: 2rem; color: var(--muted); }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <div>
-        <h1>Scraped Contacts</h1>
-        <div class="meta" id="metaInfo">Loading data...</div>
+    <h1>Scraper Bot Dashboard</h1>
+
+    <!-- Frontend Trigger Panel -->
+    <div class="panel">
+      <div class="grid" style="margin-bottom: 0.75rem;">
+        <input type="url" id="targetUrl" placeholder="Target URL (https://example.com)" />
+        <input type="text" id="repoPath" placeholder="GitHub Repo (username/repo-name)" />
+        <input type="password" id="ghToken" placeholder="GitHub PAT (saved locally in browser)" />
       </div>
-      <div class="controls">
-        <input type="search" id="searchInput" placeholder="Filter by name, email, phone..." />
+      <div class="row">
+        <button id="runBotBtn">Run Bot on URL</button>
+        <div class="meta" id="statusMsg">Idle</div>
+      </div>
+    </div>
+
+    <!-- Data Controls -->
+    <div class="row" style="margin-bottom: 1rem;">
+      <div class="meta" id="metaInfo">Loading data...</div>
+      <div class="row">
+        <input type="search" id="searchInput" placeholder="Filter results..." style="width: 220px;" />
         <button id="downloadCsvBtn" disabled>Download CSV</button>
       </div>
-    </header>
+    </div>
 
-    <div class="table-wrap">
+    <!-- Results Table -->
+    <div class="panel" style="padding: 0; overflow-x: auto;">
       <table>
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Source</th>
-          </tr>
+          <tr><th>Name</th><th>Email</th><th>Phone</th><th>Source</th></tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="4" class="empty">Loading records...</td></tr>
+          <tr><td colspan="4" class="empty">Loading...</td></tr>
         </tbody>
       </table>
     </div>
@@ -79,46 +78,106 @@
   <script>
     let allContacts = [];
     let filteredContacts = [];
+    let lastTimestamp = null;
+    let pollTimer = null;
 
-    const tableBody = document.getElementById("tableBody");
+    const targetUrlEl = document.getElementById("targetUrl");
+    const repoPathEl = document.getElementById("repoPath");
+    const ghTokenEl = document.getElementById("ghToken");
+    const runBotBtn = document.getElementById("runBotBtn");
+    const statusMsg = document.getElementById("statusMsg");
     const metaInfo = document.getElementById("metaInfo");
+    const tableBody = document.getElementById("tableBody");
     const searchInput = document.getElementById("searchInput");
     const downloadBtn = document.getElementById("downloadCsvBtn");
 
+    // Restore saved repo & token from local browser storage
+    repoPathEl.value = localStorage.getItem("scraper_repo") || "";
+    ghTokenEl.value = localStorage.getItem("scraper_pat") || "";
+
     async function loadData() {
       try {
-        // Cache-buster ensures CDN/browser always pulls the latest commit
-        const res = await fetch(`./data.json?t=${Date.now()}`);
+        const res = await fetch(`./data.json?t=${Date.now()}`, { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
+
+        const isNew = lastTimestamp && data.last_updated !== lastTimestamp;
+        lastTimestamp = data.last_updated;
 
         allContacts = data.contacts || [];
         filteredContacts = [...allContacts];
 
-        const updated = data.last_updated
-          ? new Date(data.last_updated).toLocaleString()
-          : "Unknown";
+        const updated = data.last_updated ? new Date(data.last_updated).toLocaleString() : "Unknown";
         metaInfo.textContent = `${allContacts.length} records • Last updated: ${updated}`;
         downloadBtn.disabled = allContacts.length === 0;
-
         renderTable(filteredContacts);
-      } catch (err) {
-        metaInfo.textContent = "Could not load data.json (run the scraper workflow first).";
+
+        if (isNew && pollTimer) {
+          clearInterval(pollTimer);
+          pollTimer = null;
+          statusMsg.textContent = "Scrape complete! Fresh data loaded.";
+          runBotBtn.disabled = false;
+        }
+      } catch {
+        metaInfo.textContent = "No data.json found yet. Run the bot to generate it.";
         tableBody.innerHTML = `<tr><td colspan="4" class="empty">No data available yet.</td></tr>`;
       }
     }
 
+    async function triggerBot() {
+      const url = targetUrlEl.value.trim();
+      const repo = repoPathEl.value.trim();
+      const token = ghTokenEl.value.trim();
+
+      if (!url || !repo || !token) {
+        statusMsg.textContent = "Please fill in Target URL, Repo (owner/repo), and GitHub PAT.";
+        return;
+      }
+
+      localStorage.setItem("scraper_repo", repo);
+      localStorage.setItem("scraper_pat", token);
+
+      runBotBtn.disabled = true;
+      statusMsg.textContent = "Dispatching GitHub Action...";
+
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${repo}/actions/workflows/scrape.yml/dispatches`,
+          {
+            method: "POST",
+            headers: {
+              "Accept": "application/vnd.github+json",
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              ref: "main",
+              inputs: { target_url: url }
+            })
+          }
+        );
+
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(`GitHub API ${res.status}: ${errText}`);
+        }
+
+        statusMsg.textContent = "Bot running in GitHub Actions (~45–90s). Auto-checking for fresh data...";
+        if (pollTimer) clearInterval(pollTimer);
+        pollTimer = setInterval(loadData, 10000);
+      } catch (err) {
+        statusMsg.textContent = `Error: ${err.message}`;
+        runBotBtn.disabled = false;
+      }
+    }
+
     function escapeHtml(str = "") {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
     function renderTable(rows) {
       if (!rows.length) {
-        tableBody.innerHTML = `<tr><td colspan="4" class="empty">No matching contacts found.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="4" class="empty">No matching contacts.</td></tr>`;
         return;
       }
       tableBody.innerHTML = rows.map(c => `
@@ -131,38 +190,29 @@
       `).join("");
     }
 
-    function toCsvValue(val = "") {
-      const str = String(val).replace(/"/g, '""');
-      return `"${str}"`;
-    }
-
     function downloadCsv() {
       const headers = ["Name", "Email", "Phone", "Source"];
+      const esc = v => `"${String(v || "").replace(/"/g, '""')}"`;
       const lines = [
         headers.join(","),
-        ...filteredContacts.map(c =>
-          [c.name, c.email, c.phone, c.source].map(toCsvValue).join(",")
-        )
+        ...filteredContacts.map(c => [c.name, c.email, c.phone, c.source].map(esc).join(","))
       ];
       const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `contacts_${new Date().toISOString().slice(0, 10)}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `contacts_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
       URL.revokeObjectURL(url);
     }
 
-    searchInput.addEventListener("input", (e) => {
+    searchInput.addEventListener("input", e => {
       const q = e.target.value.toLowerCase().trim();
-      filteredContacts = allContacts.filter(c =>
-        `${c.name} ${c.email} ${c.phone}`.toLowerCase().includes(q)
-      );
+      filteredContacts = allContacts.filter(c => `${c.name} ${c.email} ${c.phone}`.toLowerCase().includes(q));
       renderTable(filteredContacts);
     });
 
+    runBotBtn.addEventListener("click", triggerBot);
     downloadBtn.addEventListener("click", downloadCsv);
     loadData();
   </script>
