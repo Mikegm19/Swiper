@@ -8,6 +8,7 @@
     :root {
       --bg: #0f172a; --surface: #1e293b; --border: #334155;
       --text: #f8fafc; --muted: #94a3b8; --accent: #3b82f6; --accent-hover: #2563eb;
+      --term-bg: #020617; --green: #4ade80; --amber: #fbbf24; --red: #f87171; --cyan: #38bdf8;
     }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
     body { margin: 0; padding: 2rem; background: var(--bg); color: var(--text); }
@@ -29,7 +30,28 @@
     button:hover { background: var(--accent-hover); }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
     .row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; }
-    .meta { color: var(--muted); font-size: 0.875rem; margin-top: 0.65rem; }
+    .meta { color: var(--muted); font-size: 0.875rem; }
+
+    /* Live Terminal Console */
+    .terminal {
+      margin-top: 1rem; background: var(--term-bg); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.85rem 1rem; height: 155px; overflow-y: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+      line-height: 1.55;
+    }
+    .log-line { display: flex; gap: 0.5rem; animation: fadeIn 0.2s ease-out; }
+    .log-time { color: #64748b; user-select: none; }
+    .log-info { color: var(--cyan); }
+    .log-ok { color: var(--green); }
+    .log-warn { color: var(--amber); }
+    .log-err { color: var(--red); }
+    .cursor {
+      display: inline-block; width: 7px; height: 13px; background: var(--green);
+      vertical-align: middle; margin-left: 4px; animation: blink 1s steps(2, start) infinite;
+    }
+    @keyframes blink { to { visibility: hidden; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
     table { width: 100%; border-collapse: collapse; text-align: left; }
     th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
     th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
@@ -48,12 +70,12 @@
         <input type="url" id="targetUrl" placeholder="Enter Target URL (https://example.com/team)" />
         <button id="runBotBtn">Run Bot on URL</button>
       </div>
-      <div class="meta" id="statusMsg">Idle</div>
+      <div class="terminal" id="terminal"></div>
     </div>
 
     <!-- Data Controls -->
     <div class="row" style="margin-bottom: 1rem;">
-      <div class="meta" id="metaInfo" style="margin-top: 0;">Loading data...</div>
+      <div class="meta" id="metaInfo">Loading data...</div>
       <div class="row">
         <input type="search" id="searchInput" placeholder="Filter results..." style="flex: none; width: 220px;" />
         <button id="downloadCsvBtn" disabled>Download CSV</button>
@@ -78,16 +100,36 @@
     let filteredContacts = [];
     let lastTimestamp = null;
     let pollTimer = null;
+    let stageTimers = [];
+    let pollCount = 0;
 
     const targetUrlEl = document.getElementById("targetUrl");
     const runBotBtn = document.getElementById("runBotBtn");
-    const statusMsg = document.getElementById("statusMsg");
+    const terminalEl = document.getElementById("terminal");
     const metaInfo = document.getElementById("metaInfo");
     const tableBody = document.getElementById("tableBody");
     const searchInput = document.getElementById("searchInput");
     const downloadBtn = document.getElementById("downloadCsvBtn");
 
-    async function loadData() {
+    function log(msg, type = "info", showCursor = false) {
+      // Remove blinking cursor from previous line
+      const oldCursor = terminalEl.querySelector(".cursor");
+      if (oldCursor) oldCursor.remove();
+
+      const time = new Date().toLocaleTimeString([], { hour12: false });
+      const line = document.createElement("div");
+      line.className = "log-line";
+      line.innerHTML = `<span class="log-time">[${time}]</span><span class="log-${type}">${escapeHtml(msg)}${showCursor ? '<span class="cursor"></span>' : ""}</span>`;
+      terminalEl.appendChild(line);
+      terminalEl.scrollTop = terminalEl.scrollHeight;
+    }
+
+    function clearStageTimers() {
+      stageTimers.forEach(clearTimeout);
+      stageTimers = [];
+    }
+
+    async function loadData(isPoll = false) {
       try {
         const res = await fetch(`./data.json?t=${Date.now()}`, { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -106,25 +148,36 @@
 
         if (isNew && pollTimer) {
           clearInterval(pollTimer);
+          clearStageTimers();
           pollTimer = null;
-          statusMsg.textContent = "Scrape complete! Fresh data loaded.";
+          log(`SUCCESS: Fresh data.json received (${allContacts.length} contacts). Table updated.`, "ok");
           runBotBtn.disabled = false;
+        } else if (isPoll) {
+          pollCount++;
+          log(`Polling Vercel CDN for updated data.json (check #${pollCount})...`, "warn", true);
         }
       } catch {
-        metaInfo.textContent = "No data.json found yet. Run the bot to generate it.";
-        tableBody.innerHTML = `<tr><td colspan="4" class="empty">No data available yet.</td></tr>`;
+        if (!isPoll) {
+          metaInfo.textContent = "No data.json found yet. Run the bot to generate it.";
+          tableBody.innerHTML = `<tr><td colspan="4" class="empty">No data available yet.</td></tr>`;
+          log("Ready. No data.json detected yet—enter a URL above to start.", "warn");
+        }
       }
     }
 
     async function triggerBot() {
       const url = targetUrlEl.value.trim();
       if (!url) {
-        statusMsg.textContent = "Please enter a valid Target URL.";
+        log("ERROR: Please enter a valid URL first.", "err");
         return;
       }
 
       runBotBtn.disabled = true;
-      statusMsg.textContent = "Sending URL to Vercel backend...";
+      pollCount = 0;
+      clearStageTimers();
+      if (pollTimer) clearInterval(pollTimer);
+
+      log(`Initializing scrape job for: ${url}`, "info", true);
 
       try {
         const res = await fetch("/api/scrape", {
@@ -136,11 +189,26 @@
         const result = await res.json();
         if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
 
-        statusMsg.textContent = "Bot running in GitHub Actions (~60–90s). Auto-checking for fresh data...";
-        if (pollTimer) clearInterval(pollTimer);
-        pollTimer = setInterval(loadData, 10000);
+        log("Vercel backend authenticated & dispatched GitHub Action.", "ok", true);
+
+        // Staged pipeline feed while GitHub Actions + Vercel execute
+        const stages = [
+          [4000, "Spinning up Ubuntu runner in GitHub Actions...", "info"],
+          [12000, "Booting headless Playwright Chromium browser...", "info"],
+          [22000, "Applying anti-ban jitter & navigating to target URL...", "info"],
+          [34000, "Scrolling page & extracting linked names, emails, and phones...", "info"],
+          [48000, "Committing data.json & waiting for Vercel CDN rebuild...", "warn"],
+        ];
+
+        stages.forEach(([delay, text, type]) => {
+          stageTimers.push(setTimeout(() => {
+            if (pollTimer) log(text, type, true);
+          }, delay));
+        });
+
+        pollTimer = setInterval(() => loadData(true), 10000);
       } catch (err) {
-        statusMsg.textContent = `Error: ${err.message}`;
+        log(`ERROR: ${err.message}`, "err");
         runBotBtn.disabled = false;
       }
     }
@@ -184,6 +252,7 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      log(`Exported ${filteredContacts.length} contacts to CSV.`, "ok");
     }
 
     searchInput.addEventListener("input", e => {
@@ -196,6 +265,8 @@
 
     runBotBtn.addEventListener("click", triggerBot);
     downloadBtn.addEventListener("click", downloadCsv);
+
+    log("System online. Loading cached data.json...", "info");
     loadData();
   </script>
 </body>
