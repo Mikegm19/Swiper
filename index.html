@@ -12,26 +12,28 @@
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
     body { margin: 0; padding: 2rem; background: var(--bg); color: var(--text); }
     .container { max-width: 1050px; margin: 0 auto; }
+    h1 { margin-top: 0; font-size: 1.5rem; }
     .panel {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;
     }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }
+    .input-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
     input {
-      width: 100%; padding: 0.6rem 0.85rem; border-radius: 6px;
+      flex: 1; min-width: 240px; padding: 0.65rem 0.9rem; border-radius: 6px;
       border: 1px solid var(--border); background: var(--bg); color: var(--text);
     }
     button {
-      padding: 0.6rem 1.1rem; border: none; border-radius: 6px;
+      padding: 0.65rem 1.2rem; border: none; border-radius: 6px;
       background: var(--accent); color: white; font-weight: 600; cursor: pointer;
     }
     button:hover { background: var(--accent-hover); }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
     .row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; }
-    .meta { color: var(--muted); font-size: 0.875rem; margin-top: 0.5rem; }
+    .meta { color: var(--muted); font-size: 0.875rem; margin-top: 0.65rem; }
     table { width: 100%; border-collapse: collapse; text-align: left; }
     th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
     th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
+    tr:last-child td { border-bottom: none; }
     a { color: #60a5fa; text-decoration: none; }
     .empty { text-align: center; padding: 2rem; color: var(--muted); }
   </style>
@@ -42,22 +44,18 @@
 
     <!-- Frontend Trigger Panel -->
     <div class="panel">
-      <div class="grid" style="margin-bottom: 0.75rem;">
-        <input type="url" id="targetUrl" placeholder="Target URL (https://example.com)" />
-        <input type="text" id="repoPath" placeholder="GitHub Repo (username/repo-name)" />
-        <input type="password" id="ghToken" placeholder="GitHub PAT (saved locally in browser)" />
-      </div>
-      <div class="row">
+      <div class="input-row">
+        <input type="url" id="targetUrl" placeholder="Enter Target URL (https://example.com/team)" />
         <button id="runBotBtn">Run Bot on URL</button>
-        <div class="meta" id="statusMsg">Idle</div>
       </div>
+      <div class="meta" id="statusMsg">Idle</div>
     </div>
 
     <!-- Data Controls -->
     <div class="row" style="margin-bottom: 1rem;">
-      <div class="meta" id="metaInfo">Loading data...</div>
+      <div class="meta" id="metaInfo" style="margin-top: 0;">Loading data...</div>
       <div class="row">
-        <input type="search" id="searchInput" placeholder="Filter results..." style="width: 220px;" />
+        <input type="search" id="searchInput" placeholder="Filter results..." style="flex: none; width: 220px;" />
         <button id="downloadCsvBtn" disabled>Download CSV</button>
       </div>
     </div>
@@ -82,18 +80,12 @@
     let pollTimer = null;
 
     const targetUrlEl = document.getElementById("targetUrl");
-    const repoPathEl = document.getElementById("repoPath");
-    const ghTokenEl = document.getElementById("ghToken");
     const runBotBtn = document.getElementById("runBotBtn");
     const statusMsg = document.getElementById("statusMsg");
     const metaInfo = document.getElementById("metaInfo");
     const tableBody = document.getElementById("tableBody");
     const searchInput = document.getElementById("searchInput");
     const downloadBtn = document.getElementById("downloadCsvBtn");
-
-    // Restore saved repo & token from local browser storage
-    repoPathEl.value = localStorage.getItem("scraper_repo") || "";
-    ghTokenEl.value = localStorage.getItem("scraper_pat") || "";
 
     async function loadData() {
       try {
@@ -126,43 +118,25 @@
 
     async function triggerBot() {
       const url = targetUrlEl.value.trim();
-      const repo = repoPathEl.value.trim();
-      const token = ghTokenEl.value.trim();
-
-      if (!url || !repo || !token) {
-        statusMsg.textContent = "Please fill in Target URL, Repo (owner/repo), and GitHub PAT.";
+      if (!url) {
+        statusMsg.textContent = "Please enter a valid Target URL.";
         return;
       }
 
-      localStorage.setItem("scraper_repo", repo);
-      localStorage.setItem("scraper_pat", token);
-
       runBotBtn.disabled = true;
-      statusMsg.textContent = "Dispatching GitHub Action...";
+      statusMsg.textContent = "Sending URL to Vercel backend...";
 
       try {
-        const res = await fetch(
-          `https://api.github.com/repos/${repo}/actions/workflows/scrape.yml/dispatches`,
-          {
-            method: "POST",
-            headers: {
-              "Accept": "application/vnd.github+json",
-              "Authorization": `Bearer ${token}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              ref: "main",
-              inputs: { target_url: url }
-            })
-          }
-        );
+        const res = await fetch("/api/scrape", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url })
+        });
 
-        if (!res.ok) {
-          const errText = await res.text();
-          throw new Error(`GitHub API ${res.status}: ${errText}`);
-        }
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
 
-        statusMsg.textContent = "Bot running in GitHub Actions (~45–90s). Auto-checking for fresh data...";
+        statusMsg.textContent = "Bot running in GitHub Actions (~60–90s). Auto-checking for fresh data...";
         if (pollTimer) clearInterval(pollTimer);
         pollTimer = setInterval(loadData, 10000);
       } catch (err) {
@@ -172,7 +146,11 @@
     }
 
     function escapeHtml(str = "") {
-      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
     }
 
     function renderTable(rows) {
@@ -202,13 +180,17 @@
       const a = document.createElement("a");
       a.href = url;
       a.download = `contacts_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
 
     searchInput.addEventListener("input", e => {
       const q = e.target.value.toLowerCase().trim();
-      filteredContacts = allContacts.filter(c => `${c.name} ${c.email} ${c.phone}`.toLowerCase().includes(q));
+      filteredContacts = allContacts.filter(c =>
+        `${c.name} ${c.email} ${c.phone}`.toLowerCase().includes(q)
+      );
       renderTable(filteredContacts);
     });
 
