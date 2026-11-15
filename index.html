@@ -8,15 +8,13 @@
     :root {
       --bg-deep: #020611;
       --bg-mid: #061024;
-      --surface: rgba(10, 20, 42, 0.84);
-      --surface-solid: #0a142a;
+      --surface: rgba(10, 20, 42, 0.86);
       --border: rgba(56, 189, 248, 0.18);
       --border-strong: rgba(56, 189, 248, 0.38);
       --text: #e2ecf8;
       --muted: #7c93b5;
       --accent: #0ea5e9;
       --accent-glow: rgba(14, 165, 233, 0.35);
-      --accent-hover: #38bdf8;
       --term-bg: #02050d;
       --green: #34d399;
       --amber: #fbbf24;
@@ -47,7 +45,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
+      padding: 1.25rem;
       overflow: hidden;
       background:
         radial-gradient(circle at 50% 20%, rgba(14, 116, 144, 0.22), transparent 55%),
@@ -61,7 +59,6 @@
       pointer-events: none;
     }
 
-    /* Bioluminescent Ocean Canvas */
     .ocean-layer {
       position: absolute;
       inset: 0;
@@ -79,14 +76,8 @@
       animation: swimAcross 26s linear infinite;
     }
 
-    .whale-bob {
-      animation: gentleBob 5.5s ease-in-out infinite;
-    }
-
-    .whale-tail {
-      transform-origin: 95px 86px;
-      animation: tailWave 3.2s ease-in-out infinite;
-    }
+    .whale-bob { animation: gentleBob 5.5s ease-in-out infinite; }
+    .whale-tail { transform-origin: 95px 86px; animation: tailWave 3.2s ease-in-out infinite; }
 
     @keyframes swimAcross {
       0%   { transform: translateX(0) scale(0.95); opacity: 0; }
@@ -124,9 +115,9 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 410px;
-      padding: 2.25rem 2rem;
-      background: rgba(6, 15, 34, 0.78);
+      max-width: 400px;
+      padding: 2rem 1.5rem;
+      background: rgba(6, 15, 34, 0.82);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border: 1px solid var(--border-strong);
@@ -149,37 +140,12 @@
       margin-bottom: 1rem;
     }
 
-    .gate-card h1 {
-      margin: 0 0 0.45rem;
-      font-size: 1.65rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #f8fafc;
-    }
+    .gate-card h1 { margin: 0 0 0.45rem; font-size: 1.55rem; font-weight: 700; color: #f8fafc; }
+    .gate-card p { margin: 0 0 1.5rem; font-size: 0.9rem; color: var(--muted); }
+    .gate-form { display: flex; flex-direction: column; gap: 0.85rem; }
+    .gate-error { min-height: 1.2rem; font-size: 0.82rem; color: var(--red); }
 
-    .gate-card p {
-      margin: 0 0 1.6rem;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .gate-form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-    }
-
-    .gate-error {
-      min-height: 1.2rem;
-      font-size: 0.82rem;
-      color: var(--red);
-      margin-top: 0.25rem;
-    }
-
-    .shake {
-      animation: shake 0.35s ease;
-    }
-
+    .shake { animation: shake 0.35s ease; }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-8px); }
@@ -189,64 +155,46 @@
     /* ==================== DASHBOARD ==================== */
     #dashboard {
       display: none;
-      max-width: 1120px;
+      max-width: 1140px;
       margin: 0 auto;
-      padding: 2rem 1.25rem 3.5rem;
+      padding: 1.75rem 1.25rem 3.5rem;
     }
 
-    #dashboard.visible {
-      display: block;
-      animation: fadeIn 0.45s ease;
-    }
+    #dashboard.visible { display: block; animation: fadeIn 0.4s ease; }
 
     .topbar {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.75rem;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
     }
 
-    .brand h2 {
-      margin: 0;
-      font-size: 1.45rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-
-    .brand span {
-      display: block;
-      font-size: 0.84rem;
-      color: var(--muted);
-      margin-top: 0.15rem;
-    }
+    .brand h2 { margin: 0; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+    .brand span { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 0.15rem; }
 
     .panel {
       background: var(--surface);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1.35rem;
-      margin-bottom: 1.4rem;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
     }
 
-    .input-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
+    .input-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
     input {
       flex: 1;
-      min-width: 230px;
-      padding: 0.75rem 1rem;
+      min-width: 200px;
+      padding: 0.75rem 0.95rem;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: rgba(2, 6, 17, 0.85);
       color: var(--text);
-      font-size: 0.92rem;
+      font-size: 16px; /* Prevents iOS Safari auto-zoom */
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -257,34 +205,27 @@
     }
 
     button {
-      padding: 0.75rem 1.35rem;
+      padding: 0.75rem 1.2rem;
       border: none;
       border-radius: 8px;
       background: linear-gradient(135deg, #0284c7, #0ea5e9);
       color: #ffffff;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       transition: transform 0.15s, filter 0.2s;
     }
 
-    button:hover:not(:disabled) {
-      filter: brightness(1.12);
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
+    button:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-1px); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
 
     .btn-ghost {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 0.55rem 0.95rem;
-      font-size: 0.82rem;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.8rem;
     }
 
     .btn-ghost:hover:not(:disabled) {
@@ -293,21 +234,41 @@
       background: rgba(56, 189, 248, 0.08);
     }
 
+    .btn-save {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: var(--green);
+      padding: 0.45rem 0.75rem;
+      font-size: 0.78rem;
+    }
+
+    .btn-save:hover:not(:disabled) { background: rgba(52, 211, 153, 0.26); }
+
+    .btn-clear {
+      background: rgba(248, 113, 113, 0.12);
+      border: 1px solid rgba(248, 113, 113, 0.32);
+      color: var(--red);
+      padding: 0.45rem 0.7rem;
+      font-size: 0.78rem;
+    }
+
+    .btn-clear:hover:not(:disabled) { background: rgba(248, 113, 113, 0.24); }
+
     /* Terminal Console */
     .terminal {
       margin-top: 1rem;
       background: var(--term-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.9rem 1rem;
-      height: 165px;
+      padding: 0.85rem 0.95rem;
+      height: 150px;
       overflow-y: auto;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.81rem;
-      line-height: 1.6;
+      font-size: 0.78rem;
+      line-height: 1.55;
     }
 
-    .log-line { display: flex; gap: 0.6rem; animation: fadeIn 0.2s ease-out; }
+    .log-line { display: flex; gap: 0.5rem; animation: fadeIn 0.2s ease-out; }
     .log-time { color: #475569; user-select: none; flex-shrink: 0; }
     .log-info { color: var(--cyan); word-break: break-word; }
     .log-ok   { color: var(--green); word-break: break-word; }
@@ -315,77 +276,144 @@
     .log-err  { color: var(--red); word-break: break-word; }
 
     .cursor {
-      display: inline-block;
-      width: 7px;
-      height: 13px;
-      background: var(--green);
-      vertical-align: middle;
-      margin-left: 4px;
-      animation: blink 1s steps(2, start) infinite;
+      display: inline-block; width: 7px; height: 13px; background: var(--green);
+      vertical-align: middle; margin-left: 4px; animation: blink 1s steps(2, start) infinite;
     }
 
     @keyframes blink { to { visibility: hidden; } }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
-    /* Toolbar & Table */
+    /* Toolbar */
     .toolbar {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 0.9rem;
+      gap: 0.85rem;
       margin-bottom: 1rem;
     }
 
-    .meta {
-      color: var(--muted);
-      font-size: 0.86rem;
-    }
+    .meta { color: var(--muted); font-size: 0.84rem; }
 
     .toolbar-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0.6rem;
       align-items: center;
     }
 
-    .table-wrap {
-      padding: 0;
-      overflow-x: auto;
-    }
+    /* Desktop Table */
+    .table-wrap { padding: 0; overflow-x: auto; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      table-layout: auto;
-    }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
 
     th, td {
-      padding: 0.95rem 1.15rem;
+      padding: 0.9rem 1rem;
       border-bottom: 1px solid var(--border);
-      vertical-align: top;
+      vertical-align: middle;
       word-break: break-word;
     }
 
     th {
       background: rgba(2, 6, 17, 0.55);
       color: var(--muted);
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       white-space: nowrap;
     }
 
-    tbody tr:hover {
-      background: rgba(56, 189, 248, 0.05);
-    }
-
+    tbody tr:hover { background: rgba(56, 189, 248, 0.05); }
     tr:last-child td { border-bottom: none; }
+
     a { color: var(--cyan); text-decoration: none; font-weight: 500; }
     a:hover { text-decoration: underline; }
-    .empty { text-align: center; padding: 2.5rem 1rem; color: var(--muted); }
+
+    .source-pill {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      font-size: 0.78rem;
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .row-actions { display: flex; gap: 0.45rem; flex-wrap: nowrap; }
+    .empty { text-align: center; padding: 2.25rem 1rem; color: var(--muted); }
+
+    /* ==================== MOBILE CARD LAYOUT ==================== */
+    @media (max-width: 760px) {
+      #dashboard { padding: 1rem 0.85rem 3rem; }
+      .panel { padding: 1rem; }
+      .input-row, .toolbar-actions { flex-direction: column; width: 100%; }
+      .input-row input, .input-row button,
+      .toolbar-actions input, .toolbar-actions button { width: 100%; }
+
+      .table-wrap { background: transparent; border: none; box-shadow: none; }
+      table, thead, tbody, th, td, tr { display: block; width: 100%; }
+      thead { display: none; }
+
+      tbody tr {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.9rem 1rem;
+        margin-bottom: 0.85rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.48rem 0;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+        text-align: right;
+        font-size: 0.9rem;
+      }
+
+      tbody td:last-child {
+        border-bottom: none;
+        padding-top: 0.75rem;
+        padding-bottom: 0.1rem;
+      }
+
+      tbody td::before {
+        content: attr(data-label);
+        color: var(--muted);
+        font-size: 0.73rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        text-align: left;
+        flex-shrink: 0;
+        padding-top: 0.1rem;
+      }
+
+      tbody td.actions-cell {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      tbody td.actions-cell::before { display: none; }
+
+      .row-actions {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.55rem;
+        width: 100%;
+      }
+
+      .row-actions button { padding: 0.65rem 0.85rem; font-size: 0.84rem; }
+      .source-pill { max-width: 190px; }
+    }
   </style>
 </head>
 <body>
@@ -393,7 +421,6 @@
   <!-- ==================== FIRST PAGE: WHALE GATEKEEPER ==================== -->
   <section id="gateScreen">
     <div class="ocean-layer" id="oceanLayer">
-      <!-- Animated Deep-Sea Whale SVG -->
       <div class="whale-track">
         <div class="whale-bob">
           <svg viewBox="0 0 460 180" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -404,18 +431,13 @@
                 <stop offset="100%" stop-color="#0f172a" stop-opacity="0.95" />
               </linearGradient>
             </defs>
-            <!-- Tail -->
             <g class="whale-tail">
               <path d="M98 86 C62 72, 34 38, 12 24 C22 52, 36 74, 58 86 C34 98, 16 122, 10 144 C36 130, 66 106, 98 92 Z" fill="url(#whaleGrad)" />
             </g>
-            <!-- Main Body -->
             <path d="M90 88 C145 36, 255 18, 352 40 C408 53, 444 78, 448 104 C448 122, 424 134, 384 136 C322 140, 232 136, 152 114 C122 105, 102 96, 90 88 Z" fill="url(#whaleGrad)" />
-            <!-- Belly Grooves -->
             <path d="M235 126 C295 134, 365 134, 422 122" stroke="#7dd3fc" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round" />
             <path d="M255 117 C310 124, 372 124, 430 112" stroke="#7dd3fc" stroke-opacity="0.25" stroke-width="1.5" stroke-linecap="round" />
-            <!-- Pectoral Fin -->
             <path d="M275 114 C252 140, 224 162, 206 168 C228 152, 240 132, 248 112 Z" fill="#0ea5e9" fill-opacity="0.55" />
-            <!-- Eye -->
             <circle cx="388" cy="96" r="3.2" fill="#e0f2fe" fill-opacity="0.9" />
           </svg>
         </div>
@@ -455,8 +477,9 @@
     <div class="toolbar">
       <div class="meta" id="metaInfo">Loading data...</div>
       <div class="toolbar-actions">
-        <input type="search" id="searchInput" placeholder="Filter name, email, phone..." style="min-width: 210px;" />
+        <input type="search" id="searchInput" placeholder="Filter name, email, phone, site..." />
         <button id="downloadCsvBtn" disabled>Download CSV</button>
+        <button class="btn-ghost" id="restoreClearedBtn" style="display: none;">Restore Cleared (0)</button>
       </div>
     </div>
 
@@ -467,11 +490,12 @@
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
-            <th>Source Page</th>
+            <th>Source</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="4" class="empty">Loading records...</td></tr>
+          <tr><td colspan="5" class="empty">Loading records...</td></tr>
         </tbody>
       </table>
     </section>
@@ -480,6 +504,7 @@
   <script>
     const ACCESS_CODE = "Ormbalumun05";
     const SESSION_KEY = "swiper_unlocked";
+    const CLEARED_KEY = "swiper_cleared_contacts";
 
     const gateScreen = document.getElementById("gateScreen");
     const gateCard = document.getElementById("gateCard");
@@ -490,8 +515,7 @@
     const lockBtn = document.getElementById("lockBtn");
     const oceanLayer = document.getElementById("oceanLayer");
 
-    // Generate subtle rising bioluminescent bubbles
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 16; i++) {
       const b = document.createElement("div");
       b.className = "bubble";
       const size = Math.random() * 7 + 3;
@@ -539,9 +563,10 @@
 
     // ==================== DASHBOARD LOGIC ====================
     let initialized = false;
-    let allContacts = [];
-    let filteredContacts = [];
+    let rawContacts = [];
+    let visibleContacts = [];
     let lastTimestamp = null;
+    let lastCrawledCount = 0;
     let pollTimer = null;
     let stageTimers = [];
     let pollCount = 0;
@@ -553,6 +578,33 @@
     const tableBody = document.getElementById("tableBody");
     const searchInput = document.getElementById("searchInput");
     const downloadBtn = document.getElementById("downloadCsvBtn");
+    const restoreClearedBtn = document.getElementById("restoreClearedBtn");
+
+    function getClearedSet() {
+      try {
+        return new Set(JSON.parse(localStorage.getItem(CLEARED_KEY) || "[]"));
+      } catch {
+        return new Set();
+      }
+    }
+
+    function saveClearedSet(set) {
+      localStorage.setItem(CLEARED_KEY, JSON.stringify([...set]));
+    }
+
+    function contactKey(c) {
+      return `${(c.name || "").toLowerCase()}|${(c.email || "").toLowerCase()}|${c.phone || ""}`;
+    }
+
+    function shortSource(url = "") {
+      try {
+        const u = new URL(url);
+        const path = u.pathname === "/" ? "" : u.pathname;
+        return `${u.hostname.replace(/^www\./, "")}${path}`;
+      } catch {
+        return url || "Unknown";
+      }
+    }
 
     function escapeHtml(str = "") {
       return String(str)
@@ -578,6 +630,118 @@
       stageTimers = [];
     }
 
+    function refreshView() {
+      const cleared = getClearedSet();
+      const q = searchInput.value.toLowerCase().trim();
+
+      const activeContacts = rawContacts.filter(c => !cleared.has(contactKey(c)));
+      const clearedCount = rawContacts.length - activeContacts.length;
+
+      visibleContacts = activeContacts.filter(c =>
+        `${c.name} ${c.email} ${c.phone} ${c.source}`.toLowerCase().includes(q)
+      );
+
+      const updated = lastTimestamp ? new Date(lastTimestamp).toLocaleString() : "Unknown";
+      const crawledInfo = lastCrawledCount ? ` • ${lastCrawledCount} pages` : "";
+      metaInfo.textContent = `${visibleContacts.length} active (${clearedCount} cleared)${crawledInfo} • ${updated}`;
+      downloadBtn.disabled = visibleContacts.length === 0;
+
+      if (clearedCount > 0) {
+        restoreClearedBtn.style.display = "inline-block";
+        restoreClearedBtn.textContent = `Restore Cleared (${clearedCount})`;
+      } else {
+        restoreClearedBtn.style.display = "none";
+      }
+
+      renderTable(visibleContacts);
+    }
+
+    function downloadVCard(contact) {
+      const name = (contact.name && contact.name !== "Unknown")
+        ? contact.name
+        : (contact.phone || contact.email || "Scraped Contact");
+
+      const lines = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        `FN:${name}`,
+        `N:${name};;;;`,
+      ];
+      if (contact.phone) lines.push(`TEL;TYPE=CELL:${contact.phone}`);
+      if (contact.email) lines.push(`EMAIL;TYPE=INTERNET:${contact.email}`);
+      if (contact.source) lines.push(`NOTE:Scraped from ${contact.source}`);
+      lines.push("END:VCARD");
+
+      const blob = new Blob([lines.join("\r\n")], { type: "text/vcard;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${name.replace(/[^a-z0-9]/gi, "_")}.vcf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function clearContact(contact, saved = false) {
+      const cleared = getClearedSet();
+      cleared.add(contactKey(contact));
+      saveClearedSet(cleared);
+      refreshView();
+      log(
+        saved
+          ? `Exported "${contact.name || contact.phone}" to Contacts (.vcf) & cleared from list.`
+          : `Cleared "${contact.name || contact.phone}" from current list.`,
+        saved ? "ok" : "warn"
+      );
+    }
+
+    function renderTable(rows) {
+      if (!rows.length) {
+        tableBody.innerHTML = `<tr><td colspan="5" class="empty">No active contacts to display.</td></tr>`;
+        return;
+      }
+
+      tableBody.innerHTML = rows.map((c, idx) => `
+        <tr>
+          <td data-label="Name"><strong>${escapeHtml(c.name || "Unknown")}</strong></td>
+          <td data-label="Email">${c.email ? `<a href="mailto:${escapeHtml(c.email)}">${escapeHtml(c.email)}</a>` : "—"}</td>
+          <td data-label="Phone">${c.phone ? `<a href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a>` : "—"}</td>
+          <td data-label="Source">
+            <a class="source-pill" href="${escapeHtml(c.source)}" target="_blank" rel="noopener" title="${escapeHtml(c.source)}">
+              ${escapeHtml(shortSource(c.source))}
+            </a>
+          </td>
+          <td data-label="Actions" class="actions-cell">
+            <div class="row-actions">
+              <button class="btn-save" data-action="save" data-idx="${idx}">+ Save &amp; Clear</button>
+              <button class="btn-clear" data-action="clear" data-idx="${idx}">Clear</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    tableBody.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+      const contact = visibleContacts[Number(btn.dataset.idx)];
+      if (!contact) return;
+
+      if (btn.dataset.action === "save") {
+        downloadVCard(contact);
+        clearContact(contact, true);
+      } else if (btn.dataset.action === "clear") {
+        clearContact(contact, false);
+      }
+    });
+
+    restoreClearedBtn.addEventListener("click", () => {
+      localStorage.removeItem(CLEARED_KEY);
+      refreshView();
+      log("Restored all previously cleared contacts.", "info");
+    });
+
     async function loadData(isPoll = false) {
       try {
         const res = await fetch(`./data.json?t=${Date.now()}`, { cache: "no-store" });
@@ -586,21 +750,16 @@
 
         const isNew = lastTimestamp && data.last_updated !== lastTimestamp;
         lastTimestamp = data.last_updated;
+        lastCrawledCount = data.pages_crawled || 0;
+        rawContacts = data.contacts || [];
 
-        allContacts = data.contacts || [];
-        filteredContacts = [...allContacts];
-
-        const updated = data.last_updated ? new Date(data.last_updated).toLocaleString() : "Unknown";
-        const crawledInfo = data.pages_crawled ? ` • ${data.pages_crawled} pages spidered` : "";
-        metaInfo.textContent = `${allContacts.length} contacts${crawledInfo} • Updated: ${updated}`;
-        downloadBtn.disabled = allContacts.length === 0;
-        renderTable(filteredContacts);
+        refreshView();
 
         if (isNew && pollTimer) {
           clearInterval(pollTimer);
           clearStageTimers();
           pollTimer = null;
-          log(`SUCCESS: Spider finished (${data.pages_crawled || "?"} pages, ${allContacts.length} contacts).`, "ok");
+          log(`SUCCESS: Spider finished (${lastCrawledCount || "?"} pages, ${rawContacts.length} contacts).`, "ok");
           runBotBtn.disabled = false;
         } else if (isPoll) {
           pollCount++;
@@ -609,7 +768,7 @@
       } catch {
         if (!isPoll) {
           metaInfo.textContent = "No data.json yet. Launch the spider above.";
-          tableBody.innerHTML = `<tr><td colspan="4" class="empty">No contacts scraped yet.</td></tr>`;
+          tableBody.innerHTML = `<tr><td colspan="5" class="empty">No contacts scraped yet.</td></tr>`;
           log("Ready. Enter a target domain above and click Launch Spider.", "warn");
         }
       }
@@ -662,27 +821,12 @@
       }
     }
 
-    function renderTable(rows) {
-      if (!rows.length) {
-        tableBody.innerHTML = `<tr><td colspan="4" class="empty">No matching contacts found.</td></tr>`;
-        return;
-      }
-      tableBody.innerHTML = rows.map(c => `
-        <tr>
-          <td>${escapeHtml(c.name)}</td>
-          <td>${escapeHtml(c.email)}</td>
-          <td>${escapeHtml(c.phone)}</td>
-          <td><a href="${escapeHtml(c.source)}" target="_blank" rel="noopener">Open Page</a></td>
-        </tr>
-      `).join("");
-    }
-
     function downloadCsv() {
       const headers = ["Name", "Email", "Phone", "Source"];
       const esc = v => `"${String(v || "").replace(/"/g, '""')}"`;
       const lines = [
         headers.join(","),
-        ...filteredContacts.map(c => [c.name, c.email, c.phone, c.source].map(esc).join(","))
+        ...visibleContacts.map(c => [c.name, c.email, c.phone, c.source].map(esc).join(","))
       ];
       const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
@@ -693,21 +837,13 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      log(`Exported ${filteredContacts.length} contacts to CSV.`, "ok");
+      log(`Exported ${visibleContacts.length} active contacts to CSV.`, "ok");
     }
 
-    searchInput.addEventListener("input", e => {
-      const q = e.target.value.toLowerCase().trim();
-      filteredContacts = allContacts.filter(c =>
-        `${c.name} ${c.email} ${c.phone}`.toLowerCase().includes(q)
-      );
-      renderTable(filteredContacts);
-    });
-
+    searchInput.addEventListener("input", refreshView);
     runBotBtn.addEventListener("click", triggerBot);
     downloadBtn.addEventListener("click", downloadCsv);
 
-    // Auto-unlock if already authenticated in this browser tab
     if (sessionStorage.getItem(SESSION_KEY) === "1") {
       unlockDashboard();
     }
