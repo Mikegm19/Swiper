@@ -1,10 +1,15 @@
-name: Scheduled Web Scraper
+name: Playwright Scraper Bot
 
 on:
   schedule:
-    # Runs every hour on the hour (change to "0 0 * * *" for daily at midnight UTC)
-    - cron: "0 * * * *"
-  workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
+    # Runs every 6 hours at minute 17 (avoids top-of-the-hour bot spikes)
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: "Target URL to scrape (leave blank to use targets.json)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -23,10 +28,15 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Run scraper
+      - name: Install Playwright Chromium
+        run: playwright install --with-deps chromium
+
+      - name: Run scraper bot
+        env:
+          TARGET_URL: ${{ github.event.inputs.target_url }}
         run: python scraper.py
 
       - name: Commit and push updated data.json
