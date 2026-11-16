@@ -1,52 +1,9 @@
 {
-  "last_updated": "2026-11-16T11:18:33.585388+00:00",
+  "last_updated": "2026-11-16T11:47:56.354447+00:00",
   "scraped_urls": [
-    "https://www.laurence.com/?ref=producthunt&utm_source=producthunt"
+    "https://www.producthunt.com/forums?ref=header_nav"
   ],
-  "pages_crawled": 20,
-  "total_records": 7,
-  "contacts": [
-    {
-      "name": "Unknown",
-      "email": "matthew@laurence.com",
-      "phone": "",
-      "source": "https://www.laurence.com/?ref=producthunt&utm_source=producthunt"
-    },
-    {
-      "name": "Unknown",
-      "email": "support@laurence.com",
-      "phone": "",
-      "source": "https://www.laurence.com/?ref=producthunt&utm_source=producthunt"
-    },
-    {
-      "name": "The people behind the models",
-      "email": "founders@laurence.com",
-      "phone": "",
-      "source": "https://www.laurence.com/about"
-    },
-    {
-      "name": "Unknown",
-      "email": "founders@laurence.com",
-      "phone": "",
-      "source": "https://www.laurence.com/about"
-    },
-    {
-      "name": "Revenue at every level of ad spend",
-      "email": "",
-      "phone": "400 600 800",
-      "source": "https://www.laurence.com/products/forecasts"
-    },
-    {
-      "name": "Weekly performance reports",
-      "email": "reports@laurence.com",
-      "phone": "",
-      "source": "https://www.laurence.com/products/reports"
-    },
-    {
-      "name": "Connected in about a minute",
-      "email": "you@yourbrand.com",
-      "phone": "",
-      "source": "https://www.laurence.com/products/laurence-mcp"
-    }
-  ]
+  "pages_crawled": 1,
+  "total_records": 0,
+  "contacts": []
 }
