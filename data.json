@@ -1,9 +1,58 @@
 {
-  "last_updated": "2026-11-16T11:47:56.354447+00:00",
+  "last_updated": "2026-11-16T11:51:20.355902+00:00",
   "scraped_urls": [
-    "https://www.producthunt.com/forums?ref=header_nav"
+    "https://people-eat.com/en/cities/berlin"
   ],
-  "pages_crawled": 1,
-  "total_records": 0,
-  "contacts": []
+  "pages_crawled": 20,
+  "total_records": 8,
+  "contacts": [
+    {
+      "name": "Privacy Policy | peopleeat \u00b7 peopleeat",
+      "email": "",
+      "phone": "+49 115678459804",
+      "source": "https://people-eat.com/en/privacy-policy"
+    },
+    {
+      "name": "Privacy Policy | peopleeat \u00b7 peopleeat",
+      "email": "",
+      "phone": "540977946302",
+      "source": "https://people-eat.com/en/privacy-policy"
+    },
+    {
+      "name": "Privacy Policy | peopleeat \u00b7 peopleeat",
+      "email": "",
+      "phone": "519522125107",
+      "source": "https://people-eat.com/en/privacy-policy"
+    },
+    {
+      "name": "Privacy Policy | peopleeat \u00b7 peopleeat",
+      "email": "",
+      "phone": "651294705016",
+      "source": "https://people-eat.com/en/privacy-policy"
+    },
+    {
+      "name": "Privacy Policy | peopleeat \u00b7 peopleeat",
+      "email": "contact@people-eat.com",
+      "phone": "",
+      "source": "https://people-eat.com/en/privacy-policy"
+    },
+    {
+      "name": "Legal Notice | peopleeat \u00b7 peopleeat",
+      "email": "",
+      "phone": "15144249750",
+      "source": "https://people-eat.com/en/imprint"
+    },
+    {
+      "name": "Legal Notice | peopleeat \u00b7 peopleeat",
+      "email": "contact@people-eat.com",
+      "phone": "",
+      "source": "https://people-eat.com/en/imprint"
+    },
+    {
+      "name": "Terms and conditions \u00b7 peopleeat",
+      "email": "contact@people-eat.com",
+      "phone": "",
+      "source": "https://people-eat.com/en/terms-and-conditions"
+    }
+  ]
 }
