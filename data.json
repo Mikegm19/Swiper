@@ -1,70 +1,28 @@
 {
-  "last_updated": "2026-11-16T00:51:20.945643+00:00",
+  "last_updated": "2026-11-16T06:44:31.943415+00:00",
   "scraped_urls": [
-    "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
+    "https://webscraper.io/test-sites/e-commerce/allinone"
   ],
-  "pages_crawled": 1,
-  "total_records": 10,
+  "pages_crawled": 20,
+  "total_records": 3,
   "contacts": [
     {
-      "name": "An error occurred. We\u2019ll be right back.",
-      "email": "",
-      "phone": "71.232.181",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
+      "name": "Products",
+      "email": "info@webscraper.io",
+      "phone": "",
+      "source": "https://webscraper.io/test-sites/e-commerce/allinone"
     },
     {
-      "name": "USA",
-      "email": "",
-      "phone": "+1 855 957 1272",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
+      "name": "Unknown",
+      "email": "info@webscraper.io",
+      "phone": "",
+      "source": "https://webscraper.io/test-sites/e-commerce/allinone"
     },
     {
-      "name": "UK",
-      "email": "",
-      "phone": "+44 114 697 1778",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
-    },
-    {
-      "name": "Germany",
-      "email": "",
-      "phone": "+49 30 837 9148",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
-    },
-    {
-      "name": "Switzerland",
-      "email": "",
-      "phone": "+41-91-239-18-603",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
-    },
-    {
-      "name": "Australia",
-      "email": "",
-      "phone": "6413 0103",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
-    },
-    {
-      "name": "Italy",
-      "email": "",
-      "phone": "+39 06 9674 1658",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
-    },
-    {
-      "name": "Spain",
-      "email": "",
-      "phone": "+34-93-034-26-72",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
-    },
-    {
-      "name": "France",
-      "email": "",
-      "phone": "+33-3-67-21-01-19",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
-    },
-    {
-      "name": "International",
-      "email": "",
-      "phone": "+49 30 837 9148",
-      "source": "https://www.getyourguide.com/en-gb/berlin-l17/kochkurse-tc107/?visitor-id=XOMZFP5LI8Q1OO4R2UUN9JJ5UCO9DQE1&locale_autoredirect_optout=true"
+      "name": "Based in Latvia",
+      "email": "info@webscraper.io",
+      "phone": "40203093908",
+      "source": "https://webscraper.io/about-us"
     }
   ]
 }
