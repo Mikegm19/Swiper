@@ -1,9 +1,28 @@
 {
-  "last_updated": "2026-11-16T12:09:36.027895+00:00",
+  "last_updated": "2026-11-16T22:16:11.682443+00:00",
   "scraped_urls": [
-    "https://contactout.com/dashboard/search?gender=unknown&location=Frankfurt%2C%20Hesse%2C%20Germany%7CGermany%7CNorth%20Rhine-Westphalia%2C%20Germany&locationDistanceRadius=500&login=success&page=1&seniority=senior%7Centry%7Cdirector&title=Handwerker%7CHausmeister%7CMonteur%7CInstandhaltung&totalYears=10_9999&years=5%7C4"
+    "https://webscraper.io/test-sites/e-commerce/allinone"
   ],
   "pages_crawled": 20,
-  "total_records": 0,
-  "contacts": []
+  "total_records": 3,
+  "contacts": [
+    {
+      "name": "Products",
+      "email": "info@webscraper.io",
+      "phone": "",
+      "source": "https://webscraper.io/test-sites/e-commerce/allinone"
+    },
+    {
+      "name": "Unknown",
+      "email": "info@webscraper.io",
+      "phone": "",
+      "source": "https://webscraper.io/test-sites/e-commerce/allinone"
+    },
+    {
+      "name": "Based in Latvia",
+      "email": "info@webscraper.io",
+      "phone": "40203093908",
+      "source": "https://webscraper.io/about-us"
+    }
+  ]
 }
