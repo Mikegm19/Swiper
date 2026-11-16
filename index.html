@@ -194,7 +194,7 @@
       border: 1px solid var(--border);
       background: rgba(2, 6, 17, 0.85);
       color: var(--text);
-      font-size: 16px; /* Prevents iOS Safari auto-zoom */
+      font-size: 16px;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -502,8 +502,7 @@
   </main>
 
   <script>
-    const ACCESS_CODE = "Ormbalumun05";
-    const SESSION_KEY = "swiper_unlocked";
+    const SESSION_KEY = "swiper_passcode";
     const CLEARED_KEY = "swiper_cleared_contacts";
 
     const gateScreen = document.getElementById("gateScreen");
@@ -527,8 +526,8 @@
       oceanLayer.appendChild(b);
     }
 
-    function unlockDashboard() {
-      sessionStorage.setItem(SESSION_KEY, "1");
+    function unlockDashboard(code) {
+      sessionStorage.setItem(SESSION_KEY, code);
       gateScreen.classList.add("hidden");
       dashboard.classList.add("visible");
       if (!initialized) {
@@ -538,18 +537,37 @@
       }
     }
 
-    gateForm.addEventListener("submit", (e) => {
+    gateForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (passcodeInput.value.trim() === ACCESS_CODE) {
-        gateError.textContent = "";
-        unlockDashboard();
-      } else {
-        gateError.textContent = "Invalid authorization code.";
+      const code = passcodeInput.value.trim();
+      const btn = gateForm.querySelector("button");
+
+      btn.disabled = true;
+      btn.textContent = "Verifying...";
+      gateError.textContent = "";
+
+      try {
+        const res = await fetch("/api/scrape", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "verify", passcode: code })
+        });
+
+        if (res.ok) {
+          unlockDashboard(code);
+        } else {
+          throw new Error("Invalid authorization code.");
+        }
+      } catch (err) {
+        gateError.textContent = err.message;
         gateCard.classList.remove("shake");
         void gateCard.offsetWidth;
         gateCard.classList.add("shake");
         passcodeInput.value = "";
         passcodeInput.focus();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Unlock Dashboard";
       }
     });
 
@@ -581,11 +599,8 @@
     const restoreClearedBtn = document.getElementById("restoreClearedBtn");
 
     function getClearedSet() {
-      try {
-        return new Set(JSON.parse(localStorage.getItem(CLEARED_KEY) || "[]"));
-      } catch {
-        return new Set();
-      }
+      try { return new Set(JSON.parse(localStorage.getItem(CLEARED_KEY) || "[]")); }
+      catch { return new Set(); }
     }
 
     function saveClearedSet(set) {
@@ -599,11 +614,8 @@
     function shortSource(url = "") {
       try {
         const u = new URL(url);
-        const path = u.pathname === "/" ? "" : u.pathname;
-        return `${u.hostname.replace(/^www\./, "")}${path}`;
-      } catch {
-        return url || "Unknown";
-      }
+        return `${u.hostname.replace(/^www\./, "")}${u.pathname === "/" ? "" : u.pathname}`;
+      } catch { return url || "Unknown"; }
     }
 
     function escapeHtml(str = "") {
@@ -661,12 +673,7 @@
         ? contact.name
         : (contact.phone || contact.email || "Scraped Contact");
 
-      const lines = [
-        "BEGIN:VCARD",
-        "VERSION:3.0",
-        `FN:${name}`,
-        `N:${name};;;;`,
-      ];
+      const lines = ["BEGIN:VCARD", "VERSION:3.0", `FN:${name}`, `N:${name};;;;`];
       if (contact.phone) lines.push(`TEL;TYPE=CELL:${contact.phone}`);
       if (contact.email) lines.push(`EMAIL;TYPE=INTERNET:${contact.email}`);
       if (contact.source) lines.push(`NOTE:Scraped from ${contact.source}`);
@@ -690,8 +697,8 @@
       refreshView();
       log(
         saved
-          ? `Exported "${contact.name || contact.phone}" to Contacts (.vcf) & cleared from list.`
-          : `Cleared "${contact.name || contact.phone}" from current list.`,
+          ? `Exported "${contact.name || contact.phone}" to Contacts & cleared.`
+          : `Cleared "${contact.name || contact.phone}".`,
         saved ? "ok" : "warn"
       );
     }
@@ -792,26 +799,32 @@
         const res = await fetch("/api/scrape", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url })
+          body: JSON.stringify({
+            url,
+            passcode: sessionStorage.getItem(SESSION_KEY)
+          })
         });
 
         const result = await res.json();
+
+        if (res.status === 401) {
+          lockBtn.click();
+          throw new Error("Session expired. Please log in again.");
+        }
         if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
 
         log("Vercel backend authenticated & triggered GitHub Actions.", "ok", true);
 
         const stages = [
-          [4000,  "Starting ThreadPoolExecutor (5 concurrent workers, lxml parser)...", "info"],
-          [14000, "Discovering internal links & prioritizing /contact, /team, /about...", "info"],
-          [26000, "Checking for JS SPAs (asset-blocked Playwright fallback on standby)...", "info"],
-          [40000, "Deduplicating names, emails, mailto/tel links & committing data.json...", "warn"],
-          [55000, "Waiting for Vercel CDN to publish fresh data.json...", "warn"],
+          [4000,  "Starting ThreadPoolExecutor (5 concurrent workers)...", "info"],
+          [14000, "Discovering internal links & prioritizing targets...", "info"],
+          [26000, "Checking for JS SPAs (Playwright fallback on standby)...", "info"],
+          [40000, "Deduplicating contacts & committing data.json...", "warn"],
+          [55000, "Waiting for Vercel CDN to publish fresh data...", "warn"],
         ];
 
         stages.forEach(([delay, text, type]) => {
-          stageTimers.push(setTimeout(() => {
-            if (pollTimer) log(text, type, true);
-          }, delay));
+          stageTimers.push(setTimeout(() => { if (pollTimer) log(text, type, true); }, delay));
         });
 
         pollTimer = setInterval(() => loadData(true), 10000);
@@ -844,8 +857,16 @@
     runBotBtn.addEventListener("click", triggerBot);
     downloadBtn.addEventListener("click", downloadCsv);
 
-    if (sessionStorage.getItem(SESSION_KEY) === "1") {
-      unlockDashboard();
+    const savedCode = sessionStorage.getItem(SESSION_KEY);
+    if (savedCode) {
+      fetch("/api/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "verify", passcode: savedCode })
+      }).then(res => {
+        if (res.ok) unlockDashboard(savedCode);
+        else sessionStorage.removeItem(SESSION_KEY);
+      }).catch(() => {});
     }
   </script>
 </body>
