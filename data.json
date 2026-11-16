@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-11-16T11:57:41.484081+00:00",
+  "last_updated": "2026-11-16T12:03:13.963630+00:00",
   "scraped_urls": [
-    "https://business.booking.com/de/ressourcen-geschaftsreisen/blog/8-punkte-die-bei-der-buchung-eines-mietwagens-fur-geschaftsreisen-zu-beachten-sind/?page_type=resource_hub&aid=2139500&label=ORG_Z29vZ2xlXzFfaU9TX1NhZmFyaV8xNzk0ODMwMTM2X2RlL3Jlc3NvdXJjZW4tZ2VzY2hhZnRzcmVpc2VuL2Jsb2cvOC1wdW5rdGUtZGllLWJlaS1kZXItYnVjaHVuZy1laW5lcy1taWV0d2FnZW5zLi4uX1Jlc3NvdXJjZW4gZsO8ciBHZXNjaMOkZnRzcmVpc2VuIHwgQm9va2luZy5jb20gZm9yIEJ1c2luZXNzX2VuLWdiX05H"
+    "http://handelsregister.de/"
   ],
-  "pages_crawled": 20,
+  "pages_crawled": 2,
   "total_records": 0,
   "contacts": []
 }
