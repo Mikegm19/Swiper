@@ -1,9 +1,27 @@
+const crypto = require("crypto");
+
+const EXPECTED_HASH = "4d83a47d532df3662ab82a2de6920558974a26deea4acd00f2917ef1a86bc3e7";
+
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { url } = req.body || {};
+  const { url, passcode, action } = req.body || {};
+
+  const enteredHash = crypto
+    .createHash("sha256")
+    .update(String(passcode || ""))
+    .digest("hex");
+
+  if (enteredHash !== EXPECTED_HASH) {
+    return res.status(401).json({ error: "Invalid authorization code." });
+  }
+
+  if (action === "verify") {
+    return res.status(200).json({ ok: true });
+  }
+
   if (!url) {
     return res.status(400).json({ error: "Target URL is required" });
   }
