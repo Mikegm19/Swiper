@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 
-const EXPECTED_HASH = "4d83a47d532df3662ab82a2de6920558974a26deea4acd00f2917ef1a86bc3e7";
+const EXPECTED_HASH = "9dbe4996709f51d556caf34ea5fe6f4866b470a65d812e05db483fcae78b5d33";
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
