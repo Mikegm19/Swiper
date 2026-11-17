@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import random
@@ -14,7 +15,7 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
 # --- Spider & Concurrency Tuning ---
-MAX_PAGES = 20          # Total pages to crawl per run
+MAX_PAGES = 20          # Total pages to crawl per site
 MAX_WORKERS = 5         # Concurrent threads for fast HTTP crawling
 REQUEST_TIMEOUT = 15
 
@@ -51,17 +52,29 @@ BLOCKED_DOMAINS = (
 )
 BLOCKED_RESOURCE_TYPES = {"image", "media", "font", "stylesheet"}
 
-OUTPUT_FILE = Path("data.json")
-TARGETS_FILE = Path("targets.json")
+OUTPUT_JSON = Path("data.json")
+OUTPUT_CSV = Path("contacts_export.csv")
+TARGETS_CSV = Path("targets.csv")
 
 
 def get_seed_urls() -> list[str]:
+    """Reads URLs from the Vercel dashboard OR a targets.csv file."""
+    seeds = set()
     env_url = os.getenv("TARGET_URL", "").strip()
     if env_url:
-        return [env_url]
-    if TARGETS_FILE.exists():
-        return json.loads(TARGETS_FILE.read_text(encoding="utf-8"))
-    return []
+        seeds.add(env_url)
+
+    if TARGETS_CSV.exists():
+        print("[INFO] Found targets.csv, extracting bulk URLs...")
+        with open(TARGETS_CSV, mode="r", encoding="utf-8", errors="ignore") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                for cell in row:
+                    cell = cell.strip()
+                    if cell.startswith("http"):
+                        seeds.add(cell)
+                        
+    return list(seeds)
 
 
 def get_random_proxy() -> dict | None:
@@ -88,7 +101,6 @@ def normalize_link(base_url: str, href: str, allowed_domain: str) -> str | None:
     parsed = urlparse(clean)
     if parsed.scheme not in ("http", "https"):
         return None
-    # Allow both root domain and www subdomain
     if parsed.netloc.lower().lstrip("www.") != allowed_domain.lower().lstrip("www."):
         return None
     if parsed.path.lower().endswith(SKIP_EXTENSIONS):
@@ -112,7 +124,6 @@ def fetch_fast(url: str) -> tuple[str, str | None, bool]:
     try:
         resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
         content_type = resp.headers.get("Content-Type", "").lower()
-        print(f"[HTTP] {resp.status_code} {url}")
         if resp.status_code in (403, 429, 503):
             return (url, None, True)
         if resp.status_code != 200 or "text/html" not in content_type:
@@ -121,8 +132,7 @@ def fetch_fast(url: str) -> tuple[str, str | None, bool]:
         if looks_like_js_or_blocked(html):
             return (url, html, True)
         return (url, html, False)
-    except requests.RequestException as err:
-        print(f"[HTTP ERR] {url}: {err}")
+    except requests.RequestException:
         return (url, None, True)
 
 
@@ -131,7 +141,6 @@ def extract_phone_candidates(text: str) -> list[str]:
     for match in PHONE_REGEX.findall(text):
         cleaned = match.strip()
         digits = re.sub(r"\D", "", cleaned)
-        # Filter out years/dates (e.g., 2024-2026) and keep realistic phone lengths
         if 8 <= len(digits) <= 15 and not re.fullmatch(r"(19|20)\d{2}[-./]\d{1,2}[-./]\d{1,2}", cleaned):
             found.append(cleaned)
     return found
@@ -139,13 +148,12 @@ def extract_phone_candidates(text: str) -> list[str]:
 
 def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[dict], list[str]]:
     soup = BeautifulSoup(html, "lxml")
-
     title = (soup.title.string or "").strip() if soup.title else "No Title"
+    
     if any(w in title.lower() for w in ("just a moment", "attention required", "cloudflare")):
-        print(f"[BLOCKED] Cloudflare/WAF challenge detected on {source_url} (Title: {title})")
+        print(f"[BLOCKED] Cloudflare/WAF challenge on {source_url}")
         return [], []
 
-    # 1. Discover internal links
     priority_links = []
     regular_links = []
     for a in soup.find_all("a", href=True):
@@ -157,7 +165,6 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
         else:
             regular_links.append(link)
 
-    # 2. Container-scoped extraction (includes div cards & anchor blocks)
     contacts = []
     seen = set()
 
@@ -191,11 +198,8 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
             continue
         seen.add(key)
 
-        contacts.append(
-            {"name": name[:100], "email": email, "phone": phone, "source": source_url}
-        )
+        contacts.append({"name": name[:100], "email": email, "phone": phone, "source": source_url})
 
-    # 3. Page-wide fallback if container selectors missed everything (e.g., plain div grids)
     if not contacts:
         for tag in soup(["script", "style", "noscript"]):
             tag.decompose()
@@ -212,7 +216,6 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
 
 
 def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_visited: set, max_pw_pages: int = 10) -> tuple[list[dict], int]:
-    """Playwright spider fallback that ALSO follows discovered links."""
     contacts = []
     crawled = 0
     queue = deque(seed_urls)
@@ -233,9 +236,7 @@ def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_vi
 
         def block_heavy_assets(route):
             req = route.request
-            if req.resource_type in BLOCKED_RESOURCE_TYPES:
-                return route.abort()
-            if any(domain in req.url for domain in BLOCKED_DOMAINS):
+            if req.resource_type in BLOCKED_RESOURCE_TYPES or any(d in req.url for d in BLOCKED_DOMAINS):
                 return route.abort()
             return route.continue_()
 
@@ -261,7 +262,6 @@ def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_vi
                 html = page.content()
                 found_contacts, links = parse_page(html, url, allowed_domain)
                 contacts.extend(found_contacts)
-                print(f"[PW] {url} -> {len(found_contacts)} contacts, {len(links)} links")
 
                 for link in links:
                     if link not in pw_visited and link not in already_visited and link not in queue:
@@ -278,6 +278,7 @@ def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_vi
 
 
 def spider_site(seed_url: str) -> tuple[list[dict], int]:
+    print(f"\n[INFO] Starting crawl loop for: {seed_url}")
     allowed_domain = urlparse(seed_url).netloc
     queue = deque([seed_url.rstrip("/")])
     visited = set()
@@ -292,7 +293,6 @@ def spider_site(seed_url: str) -> tuple[list[dict], int]:
                 global_seen.add(key)
                 all_contacts.append(rec)
 
-    # Stage 1: Fast concurrent HTTP spidering
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         while queue and len(visited) < MAX_PAGES:
             batch = []
@@ -322,9 +322,7 @@ def spider_site(seed_url: str) -> tuple[list[dict], int]:
 
     total_crawled = len(visited)
 
-    # Stage 2: Playwright spider fallback (also follows links if Stage 1 got stuck)
     if js_fallback_urls:
-        print(f"[INFO] Running Playwright spider fallback starting from {len(js_fallback_urls)} URL(s)...")
         pw_contacts, pw_crawled = spider_with_playwright(
             js_fallback_urls[:5], allowed_domain, visited, max_pw_pages=10
         )
@@ -336,6 +334,10 @@ def spider_site(seed_url: str) -> tuple[list[dict], int]:
 
 def main() -> None:
     seeds = get_seed_urls()
+    if not seeds:
+        print("[INFO] No target URLs found via Vercel or targets.csv.")
+        return
+
     combined_contacts = []
     global_seen = set()
     total_pages_crawled = 0
@@ -349,6 +351,7 @@ def main() -> None:
                 global_seen.add(key)
                 combined_contacts.append(rec)
 
+    # 1. Output the JSON for the Vercel Dashboard
     payload = {
         "last_updated": datetime.now(timezone.utc).isoformat(),
         "scraped_urls": seeds,
@@ -356,9 +359,17 @@ def main() -> None:
         "total_records": len(combined_contacts),
         "contacts": combined_contacts,
     }
+    OUTPUT_JSON.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
-    OUTPUT_FILE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    print(f"[INFO] Crawled {total_pages_crawled} pages, saved {len(combined_contacts)} contacts.")
+    # 2. Output a clean CSV for bulk Excel use
+    with open(OUTPUT_CSV, mode="w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["Name", "Email", "Phone", "Source"])
+        for c in combined_contacts:
+            writer.writerow([c["name"], c["email"], c["phone"], c["source"]])
+
+    print(f"\n[SUCCESS] Crawled {total_pages_crawled} pages across {len(seeds)} sites.")
+    print(f"[SUCCESS] Saved {len(combined_contacts)} unique contacts to data.json and contacts_export.csv.")
 
 
 if __name__ == "__main__":
