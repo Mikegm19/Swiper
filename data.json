@@ -1,28 +1,574 @@
 {
-  "last_updated": "2026-11-18T21:54:16.419042+00:00",
+  "last_updated": "2026-11-18T22:02:24.470989+00:00",
   "scraped_urls": [
-    "https://branchenbuch.portal.muenchen.de/mhp/4698/"
+    "https://www.muenchen.de/service/branchenbuch/C/1327.html"
   ],
-  "pages_crawled": 1,
-  "total_records": 3,
+  "pages_crawled": 20,
+  "total_records": 94,
   "contacts": [
     {
-      "name": "Airporttransferservice Arikan M\u00fcnchen Airporttransfer / Flughafentransfer M\u00fcnche",
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
       "email": "",
       "phone": "089 80909484",
-      "source": "https://branchenbuch.portal.muenchen.de/mhp/4698"
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
     },
     {
-      "name": "Airporttransferservice Arikan M\u00fcnchen Airporttransfer / Flughafentransfer M\u00fcnche",
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
       "email": "",
-      "phone": "089 80909483",
-      "source": "https://branchenbuch.portal.muenchen.de/mhp/4698"
+      "phone": "089 90778391",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
     },
     {
-      "name": "Airporttransferservice Arikan M\u00fcnchen Airporttransfer / Flughafentransfer M\u00fcnche",
-      "email": "info@munictransfer.de",
-      "phone": "",
-      "source": "https://branchenbuch.portal.muenchen.de/mhp/4698"
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 55274891",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0176 70349441",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 90544343",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "01520 8919",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 37413044",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 95808140",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 24417601",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 2024560",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 12220969",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0171 7588732",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08761 7261",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0176 24689218",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 31198816",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 14343447",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 12503655",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0174 8568669",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 20500836",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08193 9501",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 21539361",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0160 3303333",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 57089560",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08141 3872",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08194 2849",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0176 55084184",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 89892000",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0176 56762771",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0800 7798888",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "01520 2035",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08133 9188",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 95808130",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08134 5587",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0172 8425010",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 74068076",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08167 9896",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 75969685",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "0160 93820638",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08131 9981",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08151 9713",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 74949977",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08084 5149",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 21585900",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 24889252",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 38476282",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 20356888",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08241 9020",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 48996540",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "08191 9378",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "01512 3454",
+      "source": "https://www.muenchen.de/service/branchenbuch/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Perlach und in der N\u00e4he im Stadtbranchenbuch M\u00fcnc",
+      "email": "",
+      "phone": "089 55274891",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen/muenchen/perlach/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Garching bei M\u00fcnchen und in der N\u00e4he im Stadtbran",
+      "email": "",
+      "phone": "089 90544343",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/garching-bei-muenchen/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Hohenbrunn und in der N\u00e4he im Stadtbranchenbuch M",
+      "email": "",
+      "phone": "089 90778391",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/hohenbrunn/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Unterschlei\u00dfheim und in der N\u00e4he im Stadtbranchen",
+      "email": "",
+      "phone": "089 80909484",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/unterschleissheim/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Unterschlei\u00dfheim und in der N\u00e4he im Stadtbranchen",
+      "email": "",
+      "phone": "0176 70349441",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/unterschleissheim/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Feldmoching, Hasenbergl und in der N\u00e4he im Stadtb",
+      "email": "",
+      "phone": "089 37413044",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen/muenchen/feldmoching-hasenbergl/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Altstadt, Zentrum und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 95808140",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen/muenchen/altstadt-zentrum/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Altstadt, Zentrum und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 20500836",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen/muenchen/altstadt-zentrum/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Laim und in der N\u00e4he im Stadtbranchenbuch M\u00fcnchen",
+      "email": "",
+      "phone": "01520 8919",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen/muenchen/laim/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 80909484",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 90778391",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "0176 70349441",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 90544343",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 24417601",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 2024560",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "0174 8568669",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "0176 24689218",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 57089560",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 89892000",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "01520 2035",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 95808130",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 20356888",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "089 48996540",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice M\u00fcnchen Landkreis und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "01512 3454",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen-landkreis/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Moosburg an der Isar und in der N\u00e4he im Stadtbran",
+      "email": "",
+      "phone": "08761 7261",
+      "source": "https://www.muenchen.de/service/branchenbuch/freising/moosburg-an-der-isar/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Freimann und in der N\u00e4he im Stadtbranchenbuch M\u00fcn",
+      "email": "",
+      "phone": "089 31198816",
+      "source": "https://www.muenchen.de/service/branchenbuch/muenchen/muenchen/freimann/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Erding und in der N\u00e4he im Stadtbranchenbuch M\u00fcnch",
+      "email": "",
+      "phone": "089 12220969",
+      "source": "https://www.muenchen.de/service/branchenbuch/erding/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Erding und in der N\u00e4he im Stadtbranchenbuch M\u00fcnch",
+      "email": "",
+      "phone": "0171 7588732",
+      "source": "https://www.muenchen.de/service/branchenbuch/erding/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Erding und in der N\u00e4he im Stadtbranchenbuch M\u00fcnch",
+      "email": "",
+      "phone": "0172 8425010",
+      "source": "https://www.muenchen.de/service/branchenbuch/erding/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Erding und in der N\u00e4he im Stadtbranchenbuch M\u00fcnch",
+      "email": "",
+      "phone": "08084 5149",
+      "source": "https://www.muenchen.de/service/branchenbuch/erding/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Ebersberg und in der N\u00e4he im Stadtbranchenbuch M\u00fc",
+      "email": "",
+      "phone": "089 12503655",
+      "source": "https://www.muenchen.de/service/branchenbuch/ebersberg/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Ebersberg und in der N\u00e4he im Stadtbranchenbuch M\u00fc",
+      "email": "",
+      "phone": "0160 93820638",
+      "source": "https://www.muenchen.de/service/branchenbuch/ebersberg/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Landsberg am Lech und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "08193 9501",
+      "source": "https://www.muenchen.de/service/branchenbuch/landsberg-am-lech/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Landsberg am Lech und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "08194 2849",
+      "source": "https://www.muenchen.de/service/branchenbuch/landsberg-am-lech/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Landsberg am Lech und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "08241 9020",
+      "source": "https://www.muenchen.de/service/branchenbuch/landsberg-am-lech/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Landsberg am Lech und in der N\u00e4he im Stadtbranche",
+      "email": "",
+      "phone": "08191 9378",
+      "source": "https://www.muenchen.de/service/branchenbuch/landsberg-am-lech/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice F\u00fcrstenfeldbruck und in der N\u00e4he im Stadtbranchen",
+      "email": "",
+      "phone": "08141 3872",
+      "source": "https://www.muenchen.de/service/branchenbuch/fuerstenfeldbruck/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice F\u00fcrstenfeldbruck und in der N\u00e4he im Stadtbranchen",
+      "email": "",
+      "phone": "08134 5587",
+      "source": "https://www.muenchen.de/service/branchenbuch/fuerstenfeldbruck/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Freising und in der N\u00e4he im Stadtbranchenbuch M\u00fcn",
+      "email": "",
+      "phone": "08761 7261",
+      "source": "https://www.muenchen.de/service/branchenbuch/freising/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Freising und in der N\u00e4he im Stadtbranchenbuch M\u00fcn",
+      "email": "",
+      "phone": "0176 55084184",
+      "source": "https://www.muenchen.de/service/branchenbuch/freising/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Freising und in der N\u00e4he im Stadtbranchenbuch M\u00fcn",
+      "email": "",
+      "phone": "08167 9896",
+      "source": "https://www.muenchen.de/service/branchenbuch/freising/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Dachau und in der N\u00e4he im Stadtbranchenbuch M\u00fcnch",
+      "email": "",
+      "phone": "0176 56762771",
+      "source": "https://www.muenchen.de/service/branchenbuch/dachau/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Dachau und in der N\u00e4he im Stadtbranchenbuch M\u00fcnch",
+      "email": "",
+      "phone": "08133 9188",
+      "source": "https://www.muenchen.de/service/branchenbuch/dachau/C/1327.html"
+    },
+    {
+      "name": "Chauffeurdienste / Fahrservice Dachau und in der N\u00e4he im Stadtbranchenbuch M\u00fcnch",
+      "email": "",
+      "phone": "08131 9981",
+      "source": "https://www.muenchen.de/service/branchenbuch/dachau/C/1327.html"
     }
   ]
 }
