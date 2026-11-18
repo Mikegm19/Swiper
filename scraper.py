@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
 # --- Spider & Concurrency Tuning ---
-MAX_PAGES = 20          # Total pages to crawl per site
+MAX_PAGES = 20          # Pages per site (raise to 50 for single sites; keep 15-25 for bulk CSV)
 MAX_WORKERS = 5         # Concurrent threads for fast HTTP crawling
 REQUEST_TIMEOUT = 15
 
@@ -58,23 +58,24 @@ TARGETS_CSV = Path("targets.csv")
 
 
 def get_seed_urls() -> list[str]:
-    """Reads URLs from the Vercel dashboard OR a targets.csv file."""
-    seeds = set()
+    """Uses the single URL from Vercel if provided; otherwise reads targets.csv."""
     env_url = os.getenv("TARGET_URL", "").strip()
     if env_url:
-        seeds.add(env_url)
+        return [env_url]
 
+    seeds = []
+    seen = set()
     if TARGETS_CSV.exists():
-        print("[INFO] Found targets.csv, extracting bulk URLs...")
+        print("[INFO] Reading bulk URLs from targets.csv...")
         with open(TARGETS_CSV, mode="r", encoding="utf-8", errors="ignore") as f:
             reader = csv.reader(f)
             for row in reader:
                 for cell in row:
                     cell = cell.strip()
-                    if cell.startswith("http"):
-                        seeds.add(cell)
-                        
-    return list(seeds)
+                    if cell.startswith(("http://", "https://")) and cell not in seen:
+                        seen.add(cell)
+                        seeds.append(cell)
+    return seeds
 
 
 def get_random_proxy() -> dict | None:
@@ -149,7 +150,7 @@ def extract_phone_candidates(text: str) -> list[str]:
 def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[dict], list[str]]:
     soup = BeautifulSoup(html, "lxml")
     title = (soup.title.string or "").strip() if soup.title else "No Title"
-    
+
     if any(w in title.lower() for w in ("just a moment", "attention required", "cloudflare")):
         print(f"[BLOCKED] Cloudflare/WAF challenge on {source_url}")
         return [], []
@@ -351,7 +352,6 @@ def main() -> None:
                 global_seen.add(key)
                 combined_contacts.append(rec)
 
-    # 1. Output the JSON for the Vercel Dashboard
     payload = {
         "last_updated": datetime.now(timezone.utc).isoformat(),
         "scraped_urls": seeds,
@@ -361,14 +361,13 @@ def main() -> None:
     }
     OUTPUT_JSON.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
-    # 2. Output a clean CSV for bulk Excel use
     with open(OUTPUT_CSV, mode="w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["Name", "Email", "Phone", "Source"])
         for c in combined_contacts:
             writer.writerow([c["name"], c["email"], c["phone"], c["source"]])
 
-    print(f"\n[SUCCESS] Crawled {total_pages_crawled} pages across {len(seeds)} sites.")
+    print(f"\n[SUCCESS] Crawled {total_pages_crawled} pages across {len(seeds)} site(s).")
     print(f"[SUCCESS] Saved {len(combined_contacts)} unique contacts to data.json and contacts_export.csv.")
 
 
