@@ -22,10 +22,6 @@ module.exports = async (req, res) => {
     return res.status(200).json({ ok: true });
   }
 
-  if (!url) {
-    return res.status(400).json({ error: "Target URL is required" });
-  }
-
   const token = process.env.GITHUB_PAT;
   const repo = process.env.GITHUB_REPO;
 
@@ -45,7 +41,7 @@ module.exports = async (req, res) => {
         },
         body: JSON.stringify({
           ref: "main",
-          inputs: { target_url: url },
+          inputs: { target_url: url || "" },
         }),
       }
     );
