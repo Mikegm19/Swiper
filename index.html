@@ -461,14 +461,14 @@
     <header class="topbar">
       <div class="brand">
         <h2>Swiper Spider Dashboard</h2>
-        <span>Hybrid Concurrent Crawler • Fast HTTP + Asset-Blocked Playwright</span>
+        <span>Hybrid Concurrent Crawler • Single URL or Bulk targets.csv</span>
       </div>
       <button class="btn-ghost" id="lockBtn">Lock Session</button>
     </header>
 
     <section class="panel">
       <div class="input-row">
-        <input type="url" id="targetUrl" placeholder="Enter seed URL to spider (https://example.com)" />
+        <input type="url" id="targetUrl" placeholder="Enter URL (or leave blank to run bulk targets.csv)" />
         <button id="runBotBtn">Launch Spider</button>
       </div>
       <div class="terminal" id="terminal"></div>
@@ -776,24 +776,24 @@
         if (!isPoll) {
           metaInfo.textContent = "No data.json yet. Launch the spider above.";
           tableBody.innerHTML = `<tr><td colspan="5" class="empty">No contacts scraped yet.</td></tr>`;
-          log("Ready. Enter a target domain above and click Launch Spider.", "warn");
+          log("Ready. Enter a URL or leave blank to run bulk targets.csv.", "warn");
         }
       }
     }
 
     async function triggerBot() {
       const url = targetUrlEl.value.trim();
-      if (!url) {
-        log("ERROR: Please enter a valid URL first.", "err");
-        return;
-      }
 
       runBotBtn.disabled = true;
       pollCount = 0;
       clearStageTimers();
       if (pollTimer) clearInterval(pollTimer);
 
-      log(`Dispatching concurrent spider for: ${url}`, "info", true);
+      log(
+        url ? `Dispatching concurrent spider for: ${url}` : "Dispatching bulk spider using targets.csv...",
+        "info",
+        true
+      );
 
       try {
         const res = await fetch("/api/scrape", {
@@ -819,7 +819,7 @@
           [4000,  "Starting ThreadPoolExecutor (5 concurrent workers)...", "info"],
           [14000, "Discovering internal links & prioritizing targets...", "info"],
           [26000, "Checking for JS SPAs (Playwright fallback on standby)...", "info"],
-          [40000, "Deduplicating contacts & committing data.json...", "warn"],
+          [40000, "Deduplicating contacts & exporting data.json + contacts_export.csv...", "warn"],
           [55000, "Waiting for Vercel CDN to publish fresh data...", "warn"],
         ];
 
