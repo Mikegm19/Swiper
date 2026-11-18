@@ -1,34 +1,9 @@
 {
-  "last_updated": "2026-11-18T17:02:09.982180+00:00",
+  "last_updated": "2026-11-18T21:40:15.360020+00:00",
   "scraped_urls": [
-    "https://www.reddit.com/r/urbanplanning/comments/1hk1ql2/i_discovered_one_way_to_fight_loneliness_the/"
+    "https://forum.mietrecht.de/"
   ],
-  "pages_crawled": 10,
-  "total_records": 4,
-  "contacts": [
-    {
-      "name": "User Agreement",
-      "email": "",
-      "phone": "83433880",
-      "source": "https://www.reddit.com/help/useragreement"
-    },
-    {
-      "name": "User Agreement",
-      "email": "",
-      "phone": "862872662",
-      "source": "https://www.reddit.com/help/useragreement"
-    },
-    {
-      "name": "User Agreement",
-      "email": "security@reddit.com",
-      "phone": "",
-      "source": "https://www.reddit.com/help/useragreement"
-    },
-    {
-      "name": "User Agreement",
-      "email": "copyright@reddit.com",
-      "phone": "",
-      "source": "https://www.reddit.com/help/useragreement"
-    }
-  ]
+  "pages_crawled": 1,
+  "total_records": 0,
+  "contacts": []
 }
