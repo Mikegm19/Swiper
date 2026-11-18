@@ -1,28 +1,28 @@
 {
-  "last_updated": "2026-11-18T21:45:54.093402+00:00",
+  "last_updated": "2026-11-18T21:54:16.419042+00:00",
   "scraped_urls": [
-    "https://forum.mietrecht.de/"
+    "https://branchenbuch.portal.muenchen.de/mhp/4698/"
   ],
-  "pages_crawled": 20,
+  "pages_crawled": 1,
   "total_records": 3,
   "contacts": [
     {
-      "name": "Team",
-      "email": "service@nebenkosten-berechnen.de",
-      "phone": "",
-      "source": "https://forum.mietrecht.de/community/team"
+      "name": "Airporttransferservice Arikan M\u00fcnchen Airporttransfer / Flughafentransfer M\u00fcnche",
+      "email": "",
+      "phone": "089 80909484",
+      "source": "https://branchenbuch.portal.muenchen.de/mhp/4698"
     },
     {
-      "name": "Administratoren 4",
-      "email": "service@nebenkosten-berechnen.de",
-      "phone": "",
-      "source": "https://forum.mietrecht.de/community/team"
+      "name": "Airporttransferservice Arikan M\u00fcnchen Airporttransfer / Flughafentransfer M\u00fcnche",
+      "email": "",
+      "phone": "089 80909483",
+      "source": "https://branchenbuch.portal.muenchen.de/mhp/4698"
     },
     {
-      "name": "Mitglieder 15.264",
-      "email": "service@nebenkosten-berechnen.de",
+      "name": "Airporttransferservice Arikan M\u00fcnchen Airporttransfer / Flughafentransfer M\u00fcnche",
+      "email": "info@munictransfer.de",
       "phone": "",
-      "source": "https://forum.mietrecht.de/community/members-list"
+      "source": "https://branchenbuch.portal.muenchen.de/mhp/4698"
     }
   ]
 }
