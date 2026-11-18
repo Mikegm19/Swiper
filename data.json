@@ -1,16 +1,34 @@
 {
-  "last_updated": "2026-11-18T08:11:26.979242+00:00",
+  "last_updated": "2026-11-18T17:02:09.982180+00:00",
   "scraped_urls": [
-    "https://www.spotahome.com/s/berlin?utm_source=google&utm_medium=cpc&utm_campaign=&utm_term=campaignid.23303790173_adgroupid.194939913491_keyword._matchtype.&sahinidCj0KCQiAtvXXBhC2ARIsAJc8SUQNiIQXMB5jNLUWyUaMnYgbIOnBtcIvGhw57FKAiiSHBMYJB28-OCkaAk8nEALw_wcB&gad_source=1&gad_campaignid=23303790173&gbraid=0AAAAADcr_01QFuSLlMQVxCg3nXwUDi1KH&gclid=Cj0KCQiAtvXXBhC2ARIsAJc8SUQNiIQXMB5jNLUWyUaMnYgbIOnBtcIvGhw57FKAiiSHBMYJB28-OCkaAk8nEALw_wcB"
+    "https://www.reddit.com/r/urbanplanning/comments/1hk1ql2/i_discovered_one_way_to_fight_loneliness_the/"
   ],
-  "pages_crawled": 20,
-  "total_records": 1,
+  "pages_crawled": 10,
+  "total_records": 4,
   "contacts": [
     {
-      "name": "Unknown",
-      "email": "blog@spotahome.com",
+      "name": "User Agreement",
+      "email": "",
+      "phone": "83433880",
+      "source": "https://www.reddit.com/help/useragreement"
+    },
+    {
+      "name": "User Agreement",
+      "email": "",
+      "phone": "862872662",
+      "source": "https://www.reddit.com/help/useragreement"
+    },
+    {
+      "name": "User Agreement",
+      "email": "security@reddit.com",
       "phone": "",
-      "source": "https://www.spotahome.com/blog/a-day-in-the-life-of-a-freelancer-in-london"
+      "source": "https://www.reddit.com/help/useragreement"
+    },
+    {
+      "name": "User Agreement",
+      "email": "copyright@reddit.com",
+      "phone": "",
+      "source": "https://www.reddit.com/help/useragreement"
     }
   ]
 }
