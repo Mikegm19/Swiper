@@ -1,9 +1,28 @@
 {
-  "last_updated": "2026-11-18T21:40:15.360020+00:00",
+  "last_updated": "2026-11-18T21:45:54.093402+00:00",
   "scraped_urls": [
     "https://forum.mietrecht.de/"
   ],
-  "pages_crawled": 1,
-  "total_records": 0,
-  "contacts": []
+  "pages_crawled": 20,
+  "total_records": 3,
+  "contacts": [
+    {
+      "name": "Team",
+      "email": "service@nebenkosten-berechnen.de",
+      "phone": "",
+      "source": "https://forum.mietrecht.de/community/team"
+    },
+    {
+      "name": "Administratoren 4",
+      "email": "service@nebenkosten-berechnen.de",
+      "phone": "",
+      "source": "https://forum.mietrecht.de/community/team"
+    },
+    {
+      "name": "Mitglieder 15.264",
+      "email": "service@nebenkosten-berechnen.de",
+      "phone": "",
+      "source": "https://forum.mietrecht.de/community/members-list"
+    }
+  ]
 }
