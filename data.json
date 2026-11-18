@@ -1,28 +1,16 @@
 {
-  "last_updated": "2026-11-17T08:04:30.986450+00:00",
+  "last_updated": "2026-11-18T08:11:26.979242+00:00",
   "scraped_urls": [
-    "https://webscraper.io/test-sites/e-commerce/allinone"
+    "https://www.spotahome.com/s/berlin?utm_source=google&utm_medium=cpc&utm_campaign=&utm_term=campaignid.23303790173_adgroupid.194939913491_keyword._matchtype.&sahinidCj0KCQiAtvXXBhC2ARIsAJc8SUQNiIQXMB5jNLUWyUaMnYgbIOnBtcIvGhw57FKAiiSHBMYJB28-OCkaAk8nEALw_wcB&gad_source=1&gad_campaignid=23303790173&gbraid=0AAAAADcr_01QFuSLlMQVxCg3nXwUDi1KH&gclid=Cj0KCQiAtvXXBhC2ARIsAJc8SUQNiIQXMB5jNLUWyUaMnYgbIOnBtcIvGhw57FKAiiSHBMYJB28-OCkaAk8nEALw_wcB"
   ],
   "pages_crawled": 20,
-  "total_records": 3,
+  "total_records": 1,
   "contacts": [
     {
-      "name": "Products",
-      "email": "info@webscraper.io",
-      "phone": "",
-      "source": "https://webscraper.io/test-sites/e-commerce/allinone"
-    },
-    {
       "name": "Unknown",
-      "email": "info@webscraper.io",
+      "email": "blog@spotahome.com",
       "phone": "",
-      "source": "https://webscraper.io/test-sites/e-commerce/allinone"
-    },
-    {
-      "name": "Based in Latvia",
-      "email": "info@webscraper.io",
-      "phone": "40203093908",
-      "source": "https://webscraper.io/about-us"
+      "source": "https://www.spotahome.com/blog/a-day-in-the-life-of-a-freelancer-in-london"
     }
   ]
 }
