@@ -14,9 +14,8 @@ import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
-# --- Spider & Concurrency Tuning ---
-MAX_PAGES = 20          # Pages per site (raise to 50 for single sites; keep 15-25 for bulk CSV)
-MAX_WORKERS = 5         # Concurrent threads for fast HTTP crawling
+MAX_PAGES = 20
+MAX_WORKERS = 5
 REQUEST_TIMEOUT = 15
 
 HEADERS = {
@@ -30,9 +29,8 @@ HEADERS = {
 }
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
-PHONE_REGEX = re.compile(
-    r"(?:\+\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?|\d{2,4}[\s.-])\d{3,4}[\s.-]?\d{3,4}"
-)
+# Matches numbers like +234 801 234 5678, (555) 123-4567, 08012345678, or 123-4567
+PHONE_REGEX = re.compile(r"\+?\d[\d\s().-]{6,18}\d")
 
 SKIP_EXTENSIONS = (
     ".pdf", ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp", ".ico",
@@ -58,7 +56,6 @@ TARGETS_CSV = Path("targets.csv")
 
 
 def get_seed_urls() -> list[str]:
-    """Uses the single URL from Vercel if provided; otherwise reads targets.csv."""
     env_url = os.getenv("TARGET_URL", "").strip()
     if env_url:
         return [env_url]
@@ -68,8 +65,7 @@ def get_seed_urls() -> list[str]:
     if TARGETS_CSV.exists():
         print("[INFO] Reading bulk URLs from targets.csv...")
         with open(TARGETS_CSV, mode="r", encoding="utf-8", errors="ignore") as f:
-            reader = csv.reader(f)
-            for row in reader:
+            for row in csv.reader(f):
                 for cell in row:
                     cell = cell.strip()
                     if cell.startswith(("http://", "https://")) and cell not in seen:
@@ -116,12 +112,11 @@ def looks_like_js_or_blocked(html: str) -> bool:
         return True
     for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
-    visible_text = soup.get_text(" ", strip=True)
-    return len(visible_text) < 250
+    return len(soup.get_text(" ", strip=True)) < 250
 
 
 def fetch_fast(url: str) -> tuple[str, str | None, bool]:
-    time.sleep(random.uniform(0.25, 0.8))
+    time.sleep(random.uniform(0.2, 0.6))
     try:
         resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
         content_type = resp.headers.get("Content-Type", "").lower()
@@ -137,21 +132,24 @@ def fetch_fast(url: str) -> tuple[str, str | None, bool]:
         return (url, None, True)
 
 
-def extract_phone_candidates(text: str) -> list[str]:
-    found = []
+def extract_phones_from_text(text: str) -> list[str]:
+    phones = []
+    seen = set()
     for match in PHONE_REGEX.findall(text):
-        cleaned = match.strip()
+        cleaned = re.sub(r"\s+", " ", match).strip()
         digits = re.sub(r"\D", "", cleaned)
-        # Must be 10-15 digits (standard international/local phone length), not a date
-        if not (10 <= len(digits) <= 15):
+        if not (7 <= len(digits) <= 15):
             continue
-        if re.fullmatch(r"(19|20)\d{2}[-./]\d{1,2}[-./]\d{1,2}", cleaned):
+        # Skip dates like 2026-11-21 or 11/21/2026
+        if re.fullmatch(r"\d{1,4}[-/]\d{1,2}[-/]\d{1,4}", cleaned):
             continue
-        # Reject obvious all-same or trivial sequences like 1111111111 / 1234567890
-        if len(set(digits)) <= 2 or digits in ("0123456789", "1234567890", "9876543210"):
+        # Skip all-identical digits
+        if len(set(digits)) <= 1:
             continue
-        found.append(cleaned)
-    return found
+        if cleaned not in seen:
+            seen.add(cleaned)
+            phones.append(cleaned)
+    return phones
 
 
 def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[dict], list[str]]:
@@ -162,75 +160,57 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
         print(f"[BLOCKED] Cloudflare/WAF challenge on {source_url}")
         return [], []
 
-    # Remove non-visible / code tags first so scripts/styles never leak fake numbers
+    # Strip code/hidden tags so only visible page content is read
     for tag in soup(["script", "style", "noscript", "svg", "template"]):
         tag.decompose()
 
-    priority_links = []
-    regular_links = []
+    links = []
+    seen_links = set()
     for a in soup.find_all("a", href=True):
         link = normalize_link(source_url, a["href"], allowed_domain)
-        if not link:
-            continue
-        if any(k in link.lower() for k in PRIORITY_KEYWORDS):
-            priority_links.append(link)
-        else:
-            regular_links.append(link)
+        if link and link not in seen_links:
+            seen_links.add(link)
+            if any(k in link.lower() for k in PRIORITY_KEYWORDS):
+                links.insert(0, link)
+            else:
+                links.append(link)
 
     contacts = []
-    seen = set()
+    seen_contacts = set()
 
-    containers = soup.select(
-        ".contact, .profile, .card, .member, .person, .number, .phone, article, li, tr, section, footer"
-    )
-    for block in containers:
-        text = block.get_text(" ", strip=True)
-        emails = EMAIL_REGEX.findall(text)
-        phones = extract_phone_candidates(text)
+    def add_record(name: str, email: str, phone: str):
+        key = (name.strip().lower(), email.strip().lower(), phone.strip())
+        if key not in seen_contacts and (email or phone):
+            seen_contacts.add(key)
+            contacts.append({
+                "name": (name.strip() or title)[:100],
+                "email": email.strip(),
+                "phone": phone.strip(),
+                "source": source_url,
+            })
 
-        for a in block.find_all("a", href=True):
-            href = a["href"].strip()
-            if href.lower().startswith("mailto:"):
-                emails.append(href[7:].split("?")[0].strip())
-            elif href.lower().startswith("tel:"):
-                raw_tel = re.sub(r"[^\d+]", "", href[4:].strip())
-                digits = re.sub(r"\D", "", raw_tel)
-                if 10 <= len(digits) <= 15:
-                    phones.append(raw_tel)
+    # 1. Direct tel: and mailto: links
+    for a in soup.find_all("a", href=True):
+        href = a["href"].strip()
+        label = a.get_text(" ", strip=True) or title
+        if href.lower().startswith("tel:"):
+            tel_num = re.sub(r"\s+", " ", href[4:].strip())
+            if 7 <= len(re.sub(r"\D", "", tel_num)) <= 15:
+                add_record(label, "", tel_num)
+        elif href.lower().startswith("mailto:"):
+            mail = href[7:].split("?")[0].strip()
+            if mail:
+                add_record(label, mail, "")
 
-        if not emails and not phones:
-            continue
+    # 2. Visible text across the page
+    visible_text = soup.get_text(" ", strip=True)
+    for phone in extract_phones_from_text(visible_text):
+        add_record(title, "", phone)
 
-        name_el = block.select_one("h1, h2, h3, h4, .name, .full-name, .country, strong, td")
-        name = name_el.get_text(" ", strip=True) if name_el else "Unknown"
-        email = emails[0] if emails else ""
-        phone = phones[0] if phones else ""
+    for email in dict.fromkeys(EMAIL_REGEX.findall(visible_text)):
+        add_record(title, email, "")
 
-        key = (name.lower(), email.lower(), phone)
-        if key in seen:
-            continue
-        seen.add(key)
-
-        contacts.append({"name": name[:100], "email": email, "phone": phone, "source": source_url})
-
-    # Fallback on cleaned visible text only
-    if not contacts:
-        full_text = soup.get_text(" ", strip=True)
-        fallback_emails = list(dict.fromkeys(EMAIL_REGEX.findall(full_text)))
-        fallback_phones = list(dict.fromkeys(extract_phone_candidates(full_text)))
-
-        for a in soup.find_all("a", href=True):
-            if a["href"].strip().lower().startswith("tel:"):
-                raw_tel = re.sub(r"[^\d+]", "", a["href"].strip()[4:])
-                if 10 <= len(re.sub(r"\D", "", raw_tel)) <= 15 and raw_tel not in fallback_phones:
-                    fallback_phones.insert(0, raw_tel)
-
-        for phone in fallback_phones[:50]:
-            contacts.append({"name": title[:80], "email": "", "phone": phone, "source": source_url})
-        for email in fallback_emails[:50]:
-            contacts.append({"name": title[:80], "email": email, "phone": "", "source": source_url})
-
-    return contacts, priority_links + regular_links
+    return contacts, links
 
 
 def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_visited: set, max_pw_pages: int = 10) -> tuple[list[dict], int]:
@@ -268,25 +248,23 @@ def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_vi
             crawled += 1
 
             try:
-                time.sleep(random.uniform(1.0, 2.2))
+                time.sleep(random.uniform(0.8, 1.8))
                 page.goto(url, wait_until="domcontentloaded", timeout=25000)
                 try:
                     page.wait_for_load_state("networkidle", timeout=6000)
                 except PlaywrightTimeout:
                     pass
-                page.mouse.wheel(0, random.randint(500, 900))
-                time.sleep(random.uniform(0.6, 1.2))
+                page.mouse.wheel(0, random.randint(400, 900))
+                time.sleep(random.uniform(0.5, 1.0))
 
                 html = page.content()
                 found_contacts, links = parse_page(html, url, allowed_domain)
                 contacts.extend(found_contacts)
+                print(f"[PW] {url} -> {len(found_contacts)} items, {len(links)} links")
 
                 for link in links:
                     if link not in pw_visited and link not in already_visited and link not in queue:
-                        if any(k in link.lower() for k in PRIORITY_KEYWORDS):
-                            queue.appendleft(link)
-                        else:
-                            queue.append(link)
+                        queue.append(link)
             except Exception as err:
                 print(f"[PW WARN] Failed on {url}: {err}")
 
@@ -296,7 +274,7 @@ def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_vi
 
 
 def spider_site(seed_url: str) -> tuple[list[dict], int]:
-    print(f"\n[INFO] Starting crawl loop for: {seed_url}")
+    print(f"\n[INFO] Crawling: {seed_url}")
     allowed_domain = urlparse(seed_url).netloc
     queue = deque([seed_url.rstrip("/")])
     visited = set()
@@ -329,18 +307,17 @@ def spider_site(seed_url: str) -> tuple[list[dict], int]:
                 if html:
                     contacts, links = parse_page(html, url, allowed_domain)
                     add_contacts(contacts)
+                    print(f"[HTTP] {url} -> {len(contacts)} items, {len(links)} links")
                     for link in links:
                         if link not in visited and link not in queue:
-                            if any(k in link.lower() for k in PRIORITY_KEYWORDS):
-                                queue.appendleft(link)
-                            else:
-                                queue.append(link)
+                            queue.append(link)
                 if needs_js and url not in js_fallback_urls:
                     js_fallback_urls.append(url)
 
     total_crawled = len(visited)
 
     if js_fallback_urls:
+        print(f"[INFO] Running Playwright fallback on {len(js_fallback_urls)} URL(s)...")
         pw_contacts, pw_crawled = spider_with_playwright(
             js_fallback_urls[:5], allowed_domain, visited, max_pw_pages=10
         )
