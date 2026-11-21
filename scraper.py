@@ -31,7 +31,7 @@ HEADERS = {
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
 PHONE_REGEX = re.compile(
-    r"(?:\+\d{1,3}[\s.-]?)?(?:\(?\d{2,4}\)?[\s.-]?)?\d{3,4}[\s.-]?\d{3,4}"
+    r"(?:\+\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?|\d{2,4}[\s.-])\d{3,4}[\s.-]?\d{3,4}"
 )
 
 SKIP_EXTENSIONS = (
@@ -142,8 +142,15 @@ def extract_phone_candidates(text: str) -> list[str]:
     for match in PHONE_REGEX.findall(text):
         cleaned = match.strip()
         digits = re.sub(r"\D", "", cleaned)
-        if 8 <= len(digits) <= 15 and not re.fullmatch(r"(19|20)\d{2}[-./]\d{1,2}[-./]\d{1,2}", cleaned):
-            found.append(cleaned)
+        # Must be 10-15 digits (standard international/local phone length), not a date
+        if not (10 <= len(digits) <= 15):
+            continue
+        if re.fullmatch(r"(19|20)\d{2}[-./]\d{1,2}[-./]\d{1,2}", cleaned):
+            continue
+        # Reject obvious all-same or trivial sequences like 1111111111 / 1234567890
+        if len(set(digits)) <= 2 or digits in ("0123456789", "1234567890", "9876543210"):
+            continue
+        found.append(cleaned)
     return found
 
 
@@ -154,6 +161,10 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
     if any(w in title.lower() for w in ("just a moment", "attention required", "cloudflare")):
         print(f"[BLOCKED] Cloudflare/WAF challenge on {source_url}")
         return [], []
+
+    # Remove non-visible / code tags first so scripts/styles never leak fake numbers
+    for tag in soup(["script", "style", "noscript", "svg", "template"]):
+        tag.decompose()
 
     priority_links = []
     regular_links = []
@@ -182,8 +193,9 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
             if href.lower().startswith("mailto:"):
                 emails.append(href[7:].split("?")[0].strip())
             elif href.lower().startswith("tel:"):
-                raw_tel = href[4:].strip()
-                if 8 <= len(re.sub(r"\D", "", raw_tel)) <= 15:
+                raw_tel = re.sub(r"[^\d+]", "", href[4:].strip())
+                digits = re.sub(r"\D", "", raw_tel)
+                if 10 <= len(digits) <= 15:
                     phones.append(raw_tel)
 
         if not emails and not phones:
@@ -201,12 +213,17 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
 
         contacts.append({"name": name[:100], "email": email, "phone": phone, "source": source_url})
 
+    # Fallback on cleaned visible text only
     if not contacts:
-        for tag in soup(["script", "style", "noscript"]):
-            tag.decompose()
         full_text = soup.get_text(" ", strip=True)
         fallback_emails = list(dict.fromkeys(EMAIL_REGEX.findall(full_text)))
         fallback_phones = list(dict.fromkeys(extract_phone_candidates(full_text)))
+
+        for a in soup.find_all("a", href=True):
+            if a["href"].strip().lower().startswith("tel:"):
+                raw_tel = re.sub(r"[^\d+]", "", a["href"].strip()[4:])
+                if 10 <= len(re.sub(r"\D", "", raw_tel)) <= 15 and raw_tel not in fallback_phones:
+                    fallback_phones.insert(0, raw_tel)
 
         for phone in fallback_phones[:50]:
             contacts.append({"name": title[:80], "email": "", "phone": phone, "source": source_url})
