@@ -1,58 +1,22 @@
 {
-  "last_updated": "2026-11-21T02:47:35.818211+00:00",
+  "last_updated": "2026-11-21T09:40:30.315662+00:00",
   "scraped_urls": [
-    "https://www.dastelefonbuch.de/Branchen/Bodenleger/Bochum"
+    "https://www.dastelefonbuch.de/Branchen/Bodenleger/Bochum?s=eyJvcmRlcmJ5IjoicmF0aW5ncmVsIiwiY2lpZCI6IjU4MTkifQ"
   ],
   "pages_crawled": 20,
-  "total_records": 8,
+  "total_records": 2,
   "contacts": [
     {
       "name": "Unknown",
       "email": "",
-      "phone": "901738127",
-      "source": "https://www.dastelefonbuch.de/Branchen/Bodenleger/Bochum"
-    },
-    {
-      "name": "Unknown",
-      "email": "",
-      "phone": "85259297",
-      "source": "https://www.dastelefonbuch.de/Branchen/Bodenleger/Bochum?s=eyJvcmRlcmJ5IjoiY2F0bWF0Y2giLCJjaWlkIjoiNTgxOSJ9"
-    },
-    {
-      "name": "Unknown",
-      "email": "",
-      "phone": "000005809",
+      "phone": "5809.12691687",
       "source": "https://www.dastelefonbuch.de/Suche/Bodenleger/Ort/51.482476/7.215028?s=eyJyYWRpdXMiOiIyNTAwMCIsImNpIjoiQm9jaHVtIn0"
-    },
-    {
-      "name": "Unknown",
-      "email": "",
-      "phone": "282873947",
-      "source": "https://www.dastelefonbuch.de/Suche/Bodenleger/Ort/51.482476/7.215028?s=eyJyYWRpdXMiOiIyNTAwMCIsImNpIjoiQm9jaHVtIn0"
-    },
-    {
-      "name": "Unknown",
-      "email": "",
-      "phone": "253848429",
-      "source": "https://www.dastelefonbuch.de/Branchen/Bodenleger/Bochum?s=eyJvcmRlcmJ5IjoicmF0aW5ncmVsIiwiY2lpZCI6IjU4MTkifQ"
     },
     {
       "name": "Schauen Sie in Ihren E-Mail-Empfang",
       "email": "info@meintelefonbuch.de",
       "phone": "",
       "source": "https://www.dastelefonbuch.de/up/auth"
-    },
-    {
-      "name": "Unknown",
-      "email": "",
-      "phone": "333137766",
-      "source": "https://www.dastelefonbuch.de/Branchen/Bodenleger/Bochum?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiI1ODE5In0"
-    },
-    {
-      "name": "Unknown",
-      "email": "",
-      "phone": "1899396408",
-      "source": "https://www.dastelefonbuch.de/Branchen/Bodenleger/Bochum?s=eyJhdCI6IjIsMyIsImZfcmEiOiJhbnkifQ"
     }
   ]
 }
