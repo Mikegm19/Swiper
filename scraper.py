@@ -29,8 +29,7 @@ HEADERS = {
 }
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
-# Matches numbers like +234 801 234 5678, (555) 123-4567, 08012345678, or 123-4567
-PHONE_REGEX = re.compile(r"\+?\d[\d\s().-]{6,18}\d")
+PHONE_REGEX = re.compile(r"\+?\d(?:[\s().-]*\d){6,14}")
 
 SKIP_EXTENSIONS = (
     ".pdf", ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp", ".ico",
