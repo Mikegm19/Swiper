@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-11-23T14:28:12.421721+00:00",
+  "last_updated": "2026-11-23T14:35:45.535382+00:00",
   "scraped_urls": [
     "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiJ9"
   ],
   "pages_crawled": 20,
-  "total_records": 49,
+  "total_records": 45,
   "contacts": [
     {
       "name": "Tischler in Bernau bei Berlin 2026",
@@ -15,7 +15,7 @@
     {
       "name": "Tischler in Bernau bei Berlin 2026",
       "email": "",
-      "phone": "978313081",
+      "phone": "1669363684",
       "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiJ9"
     },
     {
@@ -51,8 +51,32 @@
     {
       "name": "Tischler in Bernau bei Berlin 2026",
       "email": "",
-      "phone": "3 978313081",
+      "phone": "7 1669363684",
       "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiJ9"
+    },
+    {
+      "name": "Tischler in Bernau bei Berlin-Sch\u00f6now >> Jetzt finden!",
+      "email": "",
+      "phone": "1792061467",
+      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin--Sch%C3%B6now?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiJ9"
+    },
+    {
+      "name": "Tischlereien in Bernau bei Berlin 2026",
+      "email": "",
+      "phone": "52623756",
+      "source": "https://www.dastelefonbuch.de/Branchen/Tischlerei/Bernau%20bei%20Berlin"
+    },
+    {
+      "name": "Tischlereien in Bernau bei Berlin 2026",
+      "email": "",
+      "phone": "03341 31 2",
+      "source": "https://www.dastelefonbuch.de/Branchen/Tischlerei/Bernau%20bei%20Berlin"
+    },
+    {
+      "name": "Tischlereien in Bernau bei Berlin 2026",
+      "email": "",
+      "phone": "92 52623756",
+      "source": "https://www.dastelefonbuch.de/Branchen/Tischlerei/Bernau%20bei%20Berlin"
     },
     {
       "name": "Tischlerei Fahrendholz",
@@ -67,28 +91,22 @@
       "source": "https://www.dastelefonbuch.de/service/free-call/Tischlerei%20Kr%C3%B6ll%2C%20Stefan/03338%207%2008%2059%2077/123/0216?freeCallCmd=303333333837303835393737404032366564323861666165656238343832353539393234393333363365313232356537373565393961&service=pre"
     },
     {
-      "name": "Tischler in Bernau bei Berlin-Sch\u00f6now >> Jetzt finden!",
+      "name": "Kohrt Marian prakTischler, Tischlermeister",
       "email": "",
-      "phone": "954020404",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin--Sch%C3%B6now?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiJ9"
+      "phone": "0176 45 84 59 62",
+      "source": "https://www.dastelefonbuch.de/service/free-call/Kohrt%20Marian%20prakTischler%2C%20Tischlermeister/0176%2045%2084%2059%2062/123/0216?freeCallCmd=303137363435383435393632404033386239363630666335323765386461623966333739366434373262626538333636616532613066&service=std"
     },
     {
-      "name": "Tischlereien in Bernau bei Berlin 2026",
+      "name": "Sven Tischler Baumdienst",
       "email": "",
-      "phone": "1094413",
-      "source": "https://www.dastelefonbuch.de/Branchen/Tischlerei/Bernau%20bei%20Berlin"
+      "phone": "0172 3 19 94 88",
+      "source": "https://www.dastelefonbuch.de/service/free-call/Sven%20Tischler%20Baumdienst/0172%203%2019%2094%2088/123/0216?freeCallCmd=3031373233313939343838404062363333613061633331396339306462393631313766636232393739363664663863313663376262&service=std"
     },
     {
-      "name": "Tischlereien in Bernau bei Berlin 2026",
+      "name": "Jens Dammk\u00f6hler Tischler- Jens",
       "email": "",
-      "phone": "03341 31 2",
-      "source": "https://www.dastelefonbuch.de/Branchen/Tischlerei/Bernau%20bei%20Berlin"
-    },
-    {
-      "name": "Tischlereien in Bernau bei Berlin 2026",
-      "email": "",
-      "phone": "0 1094413",
-      "source": "https://www.dastelefonbuch.de/Branchen/Tischlerei/Bernau%20bei%20Berlin"
+      "phone": "03338 76 77 00",
+      "source": "https://www.dastelefonbuch.de/service/free-call/Jens%20Dammk%C3%B6hler%20Tischler-%20Jens/03338%2076%2077%2000/123/0216?freeCallCmd=3033333338373637373030404032623734663432653766303333373831306535663237326361326264626665353935393962323663&service=std"
     },
     {
       "name": "Staubach Christian",
@@ -97,21 +115,15 @@
       "source": "https://www.dastelefonbuch.de/service/free-call/Staubach%20Christian/03338%2075%2092%2032/123/0216?freeCallCmd=3033333338373539323332404064336163326665353963333064376634393739393833323139383330313866633766643966663731&service=std"
     },
     {
-      "name": "Kohrt Marian prakTischler, Tischlermeister",
-      "email": "",
-      "phone": "0176 45 84 59 62",
-      "source": "https://www.dastelefonbuch.de/service/free-call/Kohrt%20Marian%20prakTischler%2C%20Tischlermeister/0176%2045%2084%2059%2062/123/0216?freeCallCmd=303137363435383435393632404033386239363630666335323765386461623966333739366434373262626538333636616532613066&service=std"
-    },
-    {
       "name": "Tischler - Jetzt finden!",
       "email": "",
-      "phone": "1921815778",
+      "phone": "537250107",
       "source": "https://www.dastelefonbuch.de/Suche/Tischler?s=eyJhdCI6IjEifQ"
     },
     {
       "name": "Ihre Meinung z\u00e4hlt!",
       "email": "",
-      "phone": "1921815778 10 10",
+      "phone": "537250107 10 10",
       "source": "https://www.dastelefonbuch.de/Suche/Tischler?s=eyJhdCI6IjEifQ"
     },
     {
@@ -151,42 +163,6 @@
       "source": "https://www.dastelefonbuch.de/Suche/Tischler?s=eyJhdCI6IjEifQ"
     },
     {
-      "name": "Sven Tischler Baumdienst",
-      "email": "",
-      "phone": "0172 3 19 94 88",
-      "source": "https://www.dastelefonbuch.de/service/free-call/Sven%20Tischler%20Baumdienst/0172%203%2019%2094%2088/123/0216?freeCallCmd=3031373233313939343838404062363333613061633331396339306462393631313766636232393739363664663863313663376262&service=std"
-    },
-    {
-      "name": "Jens Dammk\u00f6hler Tischler- Jens",
-      "email": "",
-      "phone": "03338 76 77 00",
-      "source": "https://www.dastelefonbuch.de/service/free-call/Jens%20Dammk%C3%B6hler%20Tischler-%20Jens/03338%2076%2077%2000/123/0216?freeCallCmd=3033333338373637373030404032623734663432653766303333373831306535663237326361326264626665353935393962323663&service=std"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin 2026",
-      "email": "",
-      "phone": "303430934",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfcmEiOiI0In0"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin 2026",
-      "email": "",
-      "phone": "28 303430934",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfcmEiOiI0In0"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin 2026",
-      "email": "",
-      "phone": "2022012205",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoicmF0aW5ncmVsIiwiY2lpZCI6IjEwMTA2In0"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin 2026",
-      "email": "",
-      "phone": "54 2022012205",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoicmF0aW5ncmVsIiwiY2lpZCI6IjEwMTA2In0"
-    },
-    {
       "name": "Herrmann Michael Tischlerei",
       "email": "",
       "phone": "03338 70 83 13",
@@ -195,31 +171,49 @@
     {
       "name": "Tischler in Bernau bei Berlin 2026",
       "email": "",
-      "phone": "1286974329",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfcmEiOiJhbnkifQ"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin 2026",
-      "email": "",
-      "phone": "3 1286974329",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfcmEiOiJhbnkifQ"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin 2026",
-      "email": "",
-      "phone": "881900598",
+      "phone": "631941489",
       "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfb3QiOiJvcGVuIn0"
     },
     {
       "name": "Tischler in Bernau bei Berlin 2026",
       "email": "",
-      "phone": "728278830",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoiY2F0bWF0Y2giLCJjaWlkIjoiMTAxMDYifQ"
+      "phone": "6420 631941489",
+      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfb3QiOiJvcGVuIn0"
     },
     {
       "name": "Tischler in Bernau bei Berlin 2026",
       "email": "",
-      "phone": "95 728278830",
+      "phone": "1409474716",
+      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfcmEiOiI0In0"
+    },
+    {
+      "name": "Tischler in Bernau bei Berlin 2026",
+      "email": "",
+      "phone": "2084091186",
+      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoicmF0aW5ncmVsIiwiY2lpZCI6IjEwMTA2In0"
+    },
+    {
+      "name": "Tischler in Bernau bei Berlin 2026",
+      "email": "",
+      "phone": "56 2084091186",
+      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoicmF0aW5ncmVsIiwiY2lpZCI6IjEwMTA2In0"
+    },
+    {
+      "name": "Tischler in Bernau bei Berlin 2026",
+      "email": "",
+      "phone": "1386483781",
+      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfcmEiOiJhbnkifQ"
+    },
+    {
+      "name": "Tischler in Bernau bei Berlin 2026",
+      "email": "",
+      "phone": "3 1386483781",
+      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfcmEiOiJhbnkifQ"
+    },
+    {
+      "name": "Tischler in Bernau bei Berlin 2026",
+      "email": "",
+      "phone": "2128424024",
       "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin?s=eyJvcmRlcmJ5IjoiY2F0bWF0Y2giLCJjaWlkIjoiMTAxMDYifQ"
     },
     {
@@ -243,7 +237,7 @@
     {
       "name": "Das Telefonbuch >> Mehr als Adressen und Telefonnummern!",
       "email": "",
-      "phone": "1687729650",
+      "phone": "1087730780",
       "source": "https://www.dastelefonbuch.de/Suche/Tischler/Ort/52.660718/13.560269?s=eyJyYWRpdXMiOiIyNTAwMCIsImNpIjoiQmVybmF1IGJlaSBCZXJsaW4ifQ"
     },
     {
@@ -279,26 +273,8 @@
     {
       "name": "Das Telefonbuch >> Mehr als Adressen und Telefonnummern!",
       "email": "",
-      "phone": "1687729650 10 10",
+      "phone": "9 1087730780 10 10",
       "source": "https://www.dastelefonbuch.de/Suche/Tischler/Ort/52.660718/13.560269?s=eyJyYWRpdXMiOiIyNTAwMCIsImNpIjoiQmVybmF1IGJlaSBCZXJsaW4ifQ"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin-Sch\u00f6now >> Jetzt finden!",
-      "email": "",
-      "phone": "407045878",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin--Sch%C3%B6now?s=eyJvcmRlcmJ5IjoibmFtZSIsImNpaWQiOiIxMDEwNiIsImZfcmEiOiJhbnkifQ"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin-Sch\u00f6now >> Jetzt finden!",
-      "email": "",
-      "phone": "1475535202",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin--Sch%C3%B6now?s=eyJvcmRlcmJ5IjoiY2F0bWF0Y2giLCJjaWlkIjoiMTAxMDYifQ"
-    },
-    {
-      "name": "Tischler in Bernau bei Berlin-Sch\u00f6now >> Jetzt finden!",
-      "email": "",
-      "phone": "9 1475535202",
-      "source": "https://www.dastelefonbuch.de/Suche/Tischler/Bernau%20bei%20Berlin--Sch%C3%B6now?s=eyJvcmRlcmJ5IjoiY2F0bWF0Y2giLCJjaWlkIjoiMTAxMDYifQ"
     }
   ]
 }
