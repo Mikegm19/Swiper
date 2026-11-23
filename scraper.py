@@ -25,11 +25,21 @@ HEADERS = {
         "Chrome/128.0.0.0 Safari/537.36"
     ),
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7",
 }
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
-PHONE_REGEX = re.compile(r"(?<!\d)\+?\d(?:[ \t().-]*\d){6,14}(?!\d)")
+# 1 leading digit + 6 to 14 more digits (7-15 digits total), allowing spaces/dashes/dots/parens
+PHONE_REGEX = re.compile(r"\+?\d(?:[ \t().-]*\d){6,14}")
+
+REVEAL_KEYWORDS = (
+    "nummer", "telefon", "anzeigen", "show", "reveal", "phone", "number", "sichtbar", "freischalten"
+)
+
+GENERIC_UI_LABELS = {
+    "impressum", "datenschutz", "cookie", "cookies", "menü", "menu", "login",
+    "privacy", "terms", "contact", "kontakt", "home", "startseite", "mehr", "more"
+}
 
 SKIP_EXTENSIONS = (
     ".pdf", ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp", ".ico",
@@ -38,8 +48,8 @@ SKIP_EXTENSIONS = (
 )
 
 PRIORITY_KEYWORDS = (
-    "contact", "team", "about", "staff", "people", "directory",
-    "number", "numbers", "phone", "sms", "receive", "country", "free"
+    "contact", "team", "about", "staff", "people", "directory", "branche",
+    "number", "numbers", "phone", "telefon", "sms", "receive", "country", "free"
 )
 
 BLOCKED_DOMAINS = (
@@ -131,47 +141,76 @@ def fetch_fast(url: str) -> tuple[str, str | None, bool]:
         return (url, None, True)
 
 
-def extract_phones_from_text(text: str) -> list[str]:
-    phones = []
-    seen = set()
+def clean_phone_match(raw: str) -> tuple[str, str] | None:
+    """Returns (formatted_phone, digits_only) if valid, else None."""
+    cleaned = re.sub(r"[ \t]+", " ", raw).strip()
+    digits = re.sub(r"\D", "", cleaned)
+    if not (7 <= len(digits) <= 15):
+        return None
+    if re.fullmatch(r"\d{1,4}[-/]\d{1,2}[-/]\d{1,4}", cleaned):
+        return None
+    if len(set(digits)) <= 1:
+        return None
+    return cleaned, digits
+
+
+def extract_phones_from_text(text: str) -> list[tuple[str, str]]:
+    results = []
+    seen_digits = set()
     for match in PHONE_REGEX.findall(text):
-        cleaned = re.sub(r"[ \t]+", " ", match).strip()
-        digits = re.sub(r"\D", "", cleaned)
-        if not (7 <= len(digits) <= 15):
+        parsed = clean_phone_match(match)
+        if not parsed:
             continue
-        if re.fullmatch(r"\d{1,4}[-/]\d{1,2}[-/]\d{1,4}", cleaned):
-            continue
-        if len(set(digits)) <= 1:
-            continue
-        if cleaned not in seen:
-            seen.add(cleaned)
-            phones.append(cleaned)
-    return phones
+        cleaned, digits = parsed
+        if digits not in seen_digits:
+            seen_digits.add(digits)
+            results.append((cleaned, digits))
+    return results
 
 
-def find_nearest_name(el, fallback_title: str) -> str:
+def is_usable_name(candidate: str) -> bool:
+    txt = re.sub(r"\s+", " ", candidate or "").strip()
+    if not (2 <= len(txt) <= 80):
+        return False
+    low = txt.lower()
+    if low in GENERIC_UI_LABELS or low.startswith(("tel:", "mailto:", "http", "www.")):
+        return False
+    # Reject strings that are mostly digits/punctuation
+    digits = len(re.sub(r"\D", "", txt))
+    if digits > len(txt) * 0.5:
+        return False
+    return True
+
+
+def find_local_name(el, fallback_title: str) -> str:
+    """Checks the element and up to 2 parent levels for a clean listing heading/name."""
+    candidates = [el]
     curr = el
-    for _ in range(5):
-        if not curr or not getattr(curr, "parent", None):
-            break
-        curr = curr.parent
-        heading = curr.find(["h1", "h2", "h3", "h4", "strong", "a"])
+    for _ in range(2):
+        if curr and getattr(curr, "parent", None):
+            curr = curr.parent
+            candidates.append(curr)
+
+    for scope in candidates:
+        if not scope or getattr(scope, "name", None) in ("body", "html", "main"):
+            continue
+        heading = scope.find(["h1", "h2", "h3", "h4", "strong"])
         if heading:
             txt = re.sub(r"\s+", " ", heading.get_text(" ", strip=True)).strip()
-            if 2 <= len(txt) <= 80 and not txt.lower().startswith(("tel:", "mailto:", "http")):
+            if is_usable_name(txt):
                 return txt
-    return fallback_title
+    return fallback_title if is_usable_name(fallback_title) else "Listing"
 
 
 def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[dict], list[str]]:
     soup = BeautifulSoup(html, "lxml")
-    title = (soup.title.string or "").strip() if soup.title else "No Title"
+    title = (soup.title.string or "").strip() if soup.title else "Listing"
 
     if any(w in title.lower() for w in ("just a moment", "attention required", "cloudflare")):
         print(f"[BLOCKED] Cloudflare/WAF challenge on {source_url}")
         return [], []
 
-    for tag in soup(["script", "style", "noscript", "svg", "template"]):
+    for tag in soup(["script", "style", "noscript", "svg", "template", "header", "footer", "nav"]):
         tag.decompose()
 
     links = []
@@ -186,57 +225,60 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
                 links.append(link)
 
     contacts = []
-    seen_contacts = set()
+    seen_phones_on_page = set()
+    seen_emails_on_page = set()
 
-    def add_record(name: str, email: str, phone: str):
-        key = (name.strip().lower(), email.strip().lower(), phone.strip())
-        if key not in seen_contacts and (email or phone):
-            seen_contacts.add(key)
-            contacts.append({
-                "name": (name.strip() or title)[:100],
-                "email": email.strip(),
-                "phone": phone.strip(),
-                "source": source_url,
-            })
+    def add_phone(name: str, phone: str, digits: str):
+        if digits in seen_phones_on_page:
+            return
+        seen_phones_on_page.add(digits)
+        contacts.append({
+            "name": (name.strip() or title)[:100],
+            "email": "",
+            "phone": phone.strip(),
+            "source": source_url,
+        })
+
+    def add_email(name: str, email: str):
+        norm_mail = email.strip().lower()
+        if not norm_mail or norm_mail in seen_emails_on_page:
+            return
+        seen_emails_on_page.add(norm_mail)
+        contacts.append({
+            "name": (name.strip() or title)[:100],
+            "email": email.strip(),
+            "phone": "",
+            "source": source_url,
+        })
 
     # 1. Direct tel: and mailto: links
     for a in soup.find_all("a", href=True):
         href = a["href"].strip()
-        label = find_nearest_name(a, a.get_text(" ", strip=True) or title)
+        label = find_local_name(a, a.get_text(" ", strip=True))
         if href.lower().startswith("tel:"):
-            tel_num = re.sub(r"\s+", " ", href[4:].strip())
-            if 7 <= len(re.sub(r"\D", "", tel_num)) <= 15:
-                add_record(label, "", tel_num)
+            parsed_tel = clean_phone_match(href[4:])
+            if parsed_tel:
+                add_phone(label, parsed_tel[0], parsed_tel[1])
         elif href.lower().startswith("mailto:"):
             mail = href[7:].split("?")[0].strip()
-            if mail:
-                add_record(label, mail, "")
+            add_email(label, mail)
 
-    # 2. Check blocks/elements containing phone numbers so names match each listing
-    for node in soup.find_all(["div", "li", "tr", "article", "section", "p", "span"]):
-        # Skip huge wrapper containers
-        raw_txt = node.get_text(" ", strip=True)
-        if len(raw_txt) > 350:
+    # 2. Compact listing blocks so each phone stays tied to its local heading
+    for node in soup.find_all(["div", "li", "tr", "article", "p", "span"]):
+        raw_txt = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
+        if not raw_txt or len(raw_txt) > 260:
             continue
-        phones = extract_phones_from_text(raw_txt)
-        if phones:
-            # Only use leaf-ish blocks that don't have child blocks with phones
-            child_has_phone = any(
-                extract_phones_from_text(child.get_text(" ", strip=True))
-                for child in node.find_all(["div", "li", "tr", "article", "section", "p"], recursive=False)
-            )
-            if not child_has_phone:
-                name = find_nearest_name(node, title)
-                for phone in phones:
-                    add_record(name, "", phone)
+        for phone, digits in extract_phones_from_text(raw_txt):
+            if digits not in seen_phones_on_page:
+                add_phone(find_local_name(node, title), phone, digits)
 
-    # 3. Full-page fallback for any remaining visible phones or emails
-    visible_text = soup.get_text(" ", strip=True)
-    for phone in extract_phones_from_text(visible_text):
-        add_record(title, "", phone)
+    # 3. Remaining visible phones/emails on page
+    visible_text = re.sub(r"\s+", " ", soup.get_text(" ", strip=True)).strip()
+    for phone, digits in extract_phones_from_text(visible_text):
+        add_phone(title, phone, digits)
 
-    for email in dict.fromkeys(EMAIL_REGEX.findall(visible_text)):
-        add_record(title, email, "")
+    for email in EMAIL_REGEX.findall(visible_text):
+        add_email(title, email)
 
     return contacts, links
 
@@ -253,7 +295,7 @@ def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_vi
         context = browser.new_context(
             user_agent=HEADERS["User-Agent"],
             viewport={"width": 1280, "height": 720},
-            locale="en-US",
+            locale="de-DE",
         )
         context.add_init_script(
             "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
@@ -285,10 +327,34 @@ def spider_with_playwright(seed_urls: list[str], allowed_domain: str, already_vi
                 page.mouse.wheel(0, random.randint(400, 900))
                 time.sleep(random.uniform(0.5, 1.0))
 
+                # Safely click up to 8 visible phone/number reveal controls per page
+                clickables = page.locator("button, a, [role='button']")
+                clicked_count = 0
+                for i in range(min(clickables.count(), 40)):
+                    if clicked_count >= 8:
+                        break
+                    item = clickables.nth(i)
+                    try:
+                        if not item.is_visible():
+                            continue
+                        label = (
+                            (item.inner_text(timeout=500) or "") + " " +
+                            (item.get_attribute("aria-label") or "") + " " +
+                            (item.get_attribute("title") or "")
+                        ).lower()
+                        if any(k in label for k in REVEAL_KEYWORDS):
+                            item.click(timeout=1500)
+                            clicked_count += 1
+                            time.sleep(0.4)
+                    except Exception:
+                        continue
+                if clicked_count:
+                    time.sleep(0.8)
+
                 html = page.content()
                 found_contacts, links = parse_page(html, url, allowed_domain)
                 contacts.extend(found_contacts)
-                print(f"[PW] {url} -> {len(found_contacts)} items, {len(links)} links")
+                print(f"[PW] {url} -> {len(found_contacts)} items, {len(links)} links (clicked {clicked_count})")
 
                 for link in links:
                     if link not in pw_visited and link not in already_visited and link not in queue:
@@ -308,13 +374,22 @@ def spider_site(seed_url: str) -> tuple[list[dict], int]:
     visited = set()
     js_fallback_urls = []
     all_contacts = []
-    global_seen = set()
+    global_seen_phones = set()
+    global_seen_emails = set()
 
     def add_contacts(records: list[dict]):
         for rec in records:
-            key = (rec["name"].lower(), rec["email"].lower(), rec["phone"])
-            if key not in global_seen:
-                global_seen.add(key)
+            phone_digits = re.sub(r"\D", "", rec.get("phone", ""))
+            email_norm = (rec.get("email") or "").strip().lower()
+            if phone_digits:
+                if phone_digits in global_seen_phones:
+                    continue
+                global_seen_phones.add(phone_digits)
+                all_contacts.append(rec)
+            elif email_norm:
+                if email_norm in global_seen_emails:
+                    continue
+                global_seen_emails.add(email_norm)
                 all_contacts.append(rec)
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
@@ -362,17 +437,24 @@ def main() -> None:
         return
 
     combined_contacts = []
-    global_seen = set()
+    global_seen_phones = set()
+    global_seen_emails = set()
     total_pages_crawled = 0
 
     for seed in seeds:
         contacts, crawled = spider_site(seed)
         total_pages_crawled += crawled
         for rec in contacts:
-            key = (rec["name"].lower(), rec["email"].lower(), rec["phone"])
-            if key not in global_seen:
-                global_seen.add(key)
-                combined_contacts.append(rec)
+            phone_digits = re.sub(r"\D", "", rec.get("phone", ""))
+            email_norm = (rec.get("email") or "").strip().lower()
+            if phone_digits:
+                if phone_digits not in global_seen_phones:
+                    global_seen_phones.add(phone_digits)
+                    combined_contacts.append(rec)
+            elif email_norm:
+                if email_norm not in global_seen_emails:
+                    global_seen_emails.add(email_norm)
+                    combined_contacts.append(rec)
 
     payload = {
         "last_updated": datetime.now(timezone.utc).isoformat(),
