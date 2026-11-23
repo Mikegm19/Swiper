@@ -254,6 +254,16 @@
 
     .btn-clear:hover:not(:disabled) { background: rgba(248, 113, 113, 0.24); }
 
+    .btn-clear-all {
+      background: rgba(248, 113, 113, 0.14);
+      border: 1px solid rgba(248, 113, 113, 0.36);
+      color: var(--red);
+      padding: 0.65rem 1rem;
+      font-size: 0.84rem;
+    }
+
+    .btn-clear-all:hover:not(:disabled) { background: rgba(248, 113, 113, 0.25); }
+
     /* Terminal Console */
     .terminal {
       margin-top: 1rem;
@@ -479,6 +489,7 @@
       <div class="toolbar-actions">
         <input type="search" id="searchInput" placeholder="Filter name, email, phone, site..." />
         <button id="downloadCsvBtn" disabled>Download CSV</button>
+        <button class="btn-clear-all" id="clearAllBtn" disabled>Clear All</button>
         <button class="btn-ghost" id="restoreClearedBtn" style="display: none;">Restore Cleared (0)</button>
       </div>
     </div>
@@ -596,6 +607,7 @@
     const tableBody = document.getElementById("tableBody");
     const searchInput = document.getElementById("searchInput");
     const downloadBtn = document.getElementById("downloadCsvBtn");
+    const clearAllBtn = document.getElementById("clearAllBtn");
     const restoreClearedBtn = document.getElementById("restoreClearedBtn");
 
     function getClearedSet() {
@@ -657,6 +669,7 @@
       const crawledInfo = lastCrawledCount ? ` • ${lastCrawledCount} pages` : "";
       metaInfo.textContent = `${visibleContacts.length} active (${clearedCount} cleared)${crawledInfo} • ${updated}`;
       downloadBtn.disabled = visibleContacts.length === 0;
+      clearAllBtn.disabled = visibleContacts.length === 0;
 
       if (clearedCount > 0) {
         restoreClearedBtn.style.display = "inline-block";
@@ -702,6 +715,16 @@
         saved ? "ok" : "warn"
       );
     }
+
+    clearAllBtn.addEventListener("click", () => {
+      if (!visibleContacts.length) return;
+      const count = visibleContacts.length;
+      const cleared = getClearedSet();
+      visibleContacts.forEach(c => cleared.add(contactKey(c)));
+      saveClearedSet(cleared);
+      refreshView();
+      log(`Cleared ${count} visible contact${count === 1 ? "" : "s"}.`, "warn");
+    });
 
     function renderTable(rows) {
       if (!rows.length) {
