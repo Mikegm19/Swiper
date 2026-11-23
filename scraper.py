@@ -29,7 +29,8 @@ HEADERS = {
 }
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
-PHONE_REGEX = re.compile(r"\+?\d(?:[\s().-]*\d){6,14}")
+# Matches phone numbers with spaces, dashes, dots, or parentheses without capping total char length
+PHONE_REGEX = re.compile(r"(?<!\d)\+?\d(?:[ \t().-]*\d){6,14}(?!\d)")
 
 SKIP_EXTENSIONS = (
     ".pdf", ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp", ".ico",
@@ -135,7 +136,7 @@ def extract_phones_from_text(text: str) -> list[str]:
     phones = []
     seen = set()
     for match in PHONE_REGEX.findall(text):
-        cleaned = re.sub(r"\s+", " ", match).strip()
+        cleaned = re.sub(r"[ \t]+", " ", match).strip()
         digits = re.sub(r"\D", "", cleaned)
         if not (7 <= len(digits) <= 15):
             continue
@@ -193,7 +194,7 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
         href = a["href"].strip()
         label = a.get_text(" ", strip=True) or title
         if href.lower().startswith("tel:"):
-            tel_num = re.sub(r"\s+", " ", href[4:].strip())
+            tel_num = re.sub(r"[ \t]+", " ", href[4:].strip())
             if 7 <= len(re.sub(r"\D", "", tel_num)) <= 15:
                 add_record(label, "", tel_num)
         elif href.lower().startswith("mailto:"):
@@ -201,8 +202,8 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
             if mail:
                 add_record(label, mail, "")
 
-    # 2. Visible text across the page
-    visible_text = soup.get_text(" ", strip=True)
+    # 2. Visible text across the page (newline separator prevents merging unrelated lines)
+    visible_text = soup.get_text("\n", strip=True)
     for phone in extract_phones_from_text(visible_text):
         add_record(title, "", phone)
 
