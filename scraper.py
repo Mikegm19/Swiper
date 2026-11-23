@@ -29,7 +29,6 @@ HEADERS = {
 }
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
-# Matches phone numbers with spaces, dashes, dots, or parentheses without capping total char length
 PHONE_REGEX = re.compile(r"(?<!\d)\+?\d(?:[ \t().-]*\d){6,14}(?!\d)")
 
 SKIP_EXTENSIONS = (
@@ -140,16 +139,28 @@ def extract_phones_from_text(text: str) -> list[str]:
         digits = re.sub(r"\D", "", cleaned)
         if not (7 <= len(digits) <= 15):
             continue
-        # Skip dates like 2026-11-21 or 11/21/2026
         if re.fullmatch(r"\d{1,4}[-/]\d{1,2}[-/]\d{1,4}", cleaned):
             continue
-        # Skip all-identical digits
         if len(set(digits)) <= 1:
             continue
         if cleaned not in seen:
             seen.add(cleaned)
             phones.append(cleaned)
     return phones
+
+
+def find_nearest_name(el, fallback_title: str) -> str:
+    curr = el
+    for _ in range(5):
+        if not curr or not getattr(curr, "parent", None):
+            break
+        curr = curr.parent
+        heading = curr.find(["h1", "h2", "h3", "h4", "strong", "a"])
+        if heading:
+            txt = re.sub(r"\s+", " ", heading.get_text(" ", strip=True)).strip()
+            if 2 <= len(txt) <= 80 and not txt.lower().startswith(("tel:", "mailto:", "http")):
+                return txt
+    return fallback_title
 
 
 def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[dict], list[str]]:
@@ -160,7 +171,6 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
         print(f"[BLOCKED] Cloudflare/WAF challenge on {source_url}")
         return [], []
 
-    # Strip code/hidden tags so only visible page content is read
     for tag in soup(["script", "style", "noscript", "svg", "template"]):
         tag.decompose()
 
@@ -192,9 +202,9 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
     # 1. Direct tel: and mailto: links
     for a in soup.find_all("a", href=True):
         href = a["href"].strip()
-        label = a.get_text(" ", strip=True) or title
+        label = find_nearest_name(a, a.get_text(" ", strip=True) or title)
         if href.lower().startswith("tel:"):
-            tel_num = re.sub(r"[ \t]+", " ", href[4:].strip())
+            tel_num = re.sub(r"\s+", " ", href[4:].strip())
             if 7 <= len(re.sub(r"\D", "", tel_num)) <= 15:
                 add_record(label, "", tel_num)
         elif href.lower().startswith("mailto:"):
@@ -202,8 +212,26 @@ def parse_page(html: str, source_url: str, allowed_domain: str) -> tuple[list[di
             if mail:
                 add_record(label, mail, "")
 
-    # 2. Visible text across the page (newline separator prevents merging unrelated lines)
-    visible_text = soup.get_text("\n", strip=True)
+    # 2. Check blocks/elements containing phone numbers so names match each listing
+    for node in soup.find_all(["div", "li", "tr", "article", "section", "p", "span"]):
+        # Skip huge wrapper containers
+        raw_txt = node.get_text(" ", strip=True)
+        if len(raw_txt) > 350:
+            continue
+        phones = extract_phones_from_text(raw_txt)
+        if phones:
+            # Only use leaf-ish blocks that don't have child blocks with phones
+            child_has_phone = any(
+                extract_phones_from_text(child.get_text(" ", strip=True))
+                for child in node.find_all(["div", "li", "tr", "article", "section", "p"], recursive=False)
+            )
+            if not child_has_phone:
+                name = find_nearest_name(node, title)
+                for phone in phones:
+                    add_record(name, "", phone)
+
+    # 3. Full-page fallback for any remaining visible phones or emails
+    visible_text = soup.get_text(" ", strip=True)
     for phone in extract_phones_from_text(visible_text):
         add_record(title, "", phone)
 
